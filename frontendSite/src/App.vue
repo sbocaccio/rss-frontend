@@ -1,27 +1,31 @@
 
 <template>
-  <v-app id="inspire">
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-    >
-      <!--  -->
-    </v-navigation-drawer>
+<div id="app" class= "app" >
 
-    <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+  <p>
 
-      <v-toolbar-title>Application</v-toolbar-title>
-    </v-app-bar>
-
-    <v-main>
-      <!--  -->
-    </v-main>
-  </v-app>
+    <router-link :to="{name: 'login'}">Login</router-link>
+    <router-link :to="{name: 'register'}">Register</router-link>
+  </p>
+  <router-view></router-view>
+</div>
 </template>
-
 <script>
-  export default {
-    data: () => ({ drawer: null }),
-  }
+
+export default {
+  name: 'App',
+  components: {
+    
+  },
+
+}
 </script>
+
+
+
+<style lang="scss" scoped>
+.app {
+
+   color: black;
+}
+</style>
