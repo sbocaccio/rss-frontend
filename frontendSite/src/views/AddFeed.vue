@@ -69,7 +69,7 @@
 
           <v-list-item-content>
           <v-list-item-title v-html="feed.fields.title"></v-list-item-title>
-          <v-list-item-subtitle v-html="feed.fields.title"></v-list-item-subtitle>
+
           </v-list-item-content>
 
           </v-list-item>
@@ -129,6 +129,7 @@ export default {
           this.successMsg = 'Subscription was created successfully'
           setTimeout(() => this.successMsg = '', 3000)
           this.getFeed()
+          this.$forceUpdate()
         }
         this.loading = false;
       }
@@ -136,14 +137,12 @@ export default {
 
     },
     async getFeed(){
-      return 1
+        var service = new SubscriptionFeed();
+        this.feeds = await (service.getFeed());
     }
   },
   async mounted() {
-    console.log('dale boca');
-    var service = new SubscriptionFeed() 
-    this.feeds = await (service.getFeed());
-    console.log(this.feeds[0].fields.image)
+      this.getFeed()
   }
 
 };
