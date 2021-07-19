@@ -31,18 +31,54 @@
       </v-form>
  
                <v-alert
-                  v-if="msg"
+                  v-if="errorMsg"
                   dense
                   outlined
                   type="error"
                 >
-                  {{msg}}
+                  {{errorMsg}}
               </v-alert>
 
+              <v-alert
+                v-if="successMsg"
+                dense
+                outlined
+                type="success"
+              >
+                {{successMsg}}
+            </v-alert>
+
       </v-col>
-    </v-row>
+   </v-row>
+
+    <v-card
+    max-width="900"
+    class="action"
+  >
+
+    <v-list three-line align="center">
+      <template v-for="feed in feeds">
+
+          <v-list-item
+          :key="feed.fields.title"
+        >
+          <v-list-item-avatar>
+            <v-img :src="feed.fields.image" alt="Girl in a jacket" />
+        
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+          <v-list-item-title v-html="feed.fields.title"></v-list-item-title>
+          <v-list-item-subtitle v-html="feed.fields.title"></v-list-item-subtitle>
+          </v-list-item-content>
+
+          </v-list-item>
+      </template>
+    </v-list>
+  </v-card>
   </v-app>
 </div>
+
 
 </template>
 
@@ -56,15 +92,17 @@ export default {
         required: value => !!value || 'Required.',
       },
       url: '',
-      msg: '',
+      errorMsg: '',
       loading: false,
       isFormValid: false,
-
+      successMsg: '',
+      feeds: ''
     };
   },
   methods: {
-    handleError(){
-         this.msg = 'Unable to add this page to your subscriptions ...'
+    handleError(error){
+         this.errorMsg = error          
+         setTimeout(() => this.errorMsg = '', 3000)
     },
     async submitFeed() {
       if(!this.loading){
@@ -82,15 +120,41 @@ export default {
           }
         catch(error){
             success = false
-            this.handleError();
+            var message = error.response.data.message
+            this.handleError(message);
             
         }
         if(success){
-          this.msg = ''
+
+          this.successMsg = 'Subscription was created successfully'
+          setTimeout(() => this.successMsg = '', 3000)
+          this.getFeed()
         }
         this.loading = false;
       }
+
+
+    },
+    async getFeed(){
+      return 1
     }
+  },
+  async mounted() {
+    console.log('dale boca');
+    var service = new SubscriptionFeed() 
+    this.feeds = await (service.getFeed());
+    console.log(this.feeds[0].fields.image)
   }
+
 };
 </script>
+
+
+<style>
+.action {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    height: 100vh;
+}
+</style>

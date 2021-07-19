@@ -22,4 +22,12 @@ export default class AuthService {
     
   }
  
+  headerWithToken(){
+    var token =  window.localStorage.getItem('access_token')
+    var config = {
+      headers: { Authorization: `Bearer ` + token}
+     }
+    return config
+  }
+
 }
