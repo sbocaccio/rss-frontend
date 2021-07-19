@@ -6,9 +6,15 @@ export default class SubscriptionFeed {
 
   
   async addFeed(credentials) {
-    await axiosApiInstance
-    .post(url + 'create_feed/', credentials);
 
+    var token =  window.localStorage.getItem('access_token')
+    const config = {
+      headers: { Authorization: `Bearer ` + token}
+     };
+    await axiosApiInstance
+    .post(url + 'create_feed/', credentials,
+    config
+    )
   }
  
 }
