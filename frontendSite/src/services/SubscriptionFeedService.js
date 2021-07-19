@@ -6,10 +6,9 @@ export default class SubscriptionFeed {
 
   
   async addFeed(credentials) {
-    const response = await axiosApiInstance
+    await axiosApiInstance
     .post(url + 'create_feed/', credentials);
 
-    if(response.status == '200'){ console.log('vamo boquita') }
   }
  
 }
