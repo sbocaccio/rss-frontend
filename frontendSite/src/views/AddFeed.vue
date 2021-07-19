@@ -1,7 +1,7 @@
 
 <template>
     
-<div id="app" class="success">
+<div id="app" >
   <v-app id="login">
     <v-row>
       <v-col
@@ -68,7 +68,9 @@ export default {
     },
     async submitFeed() {
       if(!this.loading){
+        var success = true
         try{
+            
             this.loading = true
             const credentials = {
               'get_or_create': this.url,
@@ -79,8 +81,12 @@ export default {
           
           }
         catch(error){
+            success = false
             this.handleError();
             
+        }
+        if(success){
+          this.msg = ''
         }
         this.loading = false;
       }
