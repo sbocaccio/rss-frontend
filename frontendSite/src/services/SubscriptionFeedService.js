@@ -22,7 +22,7 @@ async getFeed() {
   .get(url + 'feed/', 
   config
   )
-  return (JSON.parse(resp.data.feed));
+  return (resp.data);
 }
 
 }

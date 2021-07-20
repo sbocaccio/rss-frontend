@@ -60,15 +60,15 @@
       <template v-for="feed in feeds">
 
           <v-list-item
-          :key="feed.fields.title"
+          :key="feed.title"
         >
           <v-list-item-avatar>
-            <v-img :src="feed.fields.image" alt="Girl in a jacket" />
+            <v-img :src="feed.image" />
         
           </v-list-item-avatar>
 
           <v-list-item-content>
-          <v-list-item-title v-html="feed.fields.title"></v-list-item-title>
+          <v-list-item-title v-html="feed.title"></v-list-item-title>
 
           </v-list-item-content>
 
@@ -111,7 +111,7 @@ export default {
             
             this.loading = true
             const credentials = {
-              'get_or_create': this.url,
+              'link': this.url,
             }
             var service = new SubscriptionFeed() 
             await (service.addFeed(credentials));
