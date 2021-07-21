@@ -9,10 +9,11 @@ export default class SubscriptionFeed {
 
     var authService = new AuthService()
     var config = authService.headerWithToken()
-    await axiosApiInstance
+    var response = await axiosApiInstance
     .post(url + 'feed/', credentials,
     config
     )
+    return response
   }
    
 async getFeed() {

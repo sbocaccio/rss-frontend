@@ -19,7 +19,6 @@ export default class AuthService {
     .post(url + 'register/', credentials);
     
     if(response.status == '200'){ this.savetokens(response.data) }
-    
   }
  
   headerWithToken(){

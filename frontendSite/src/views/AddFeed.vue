@@ -29,23 +29,13 @@
       </v-btn>
      
       </v-form>
- 
                <v-alert
-                  v-if="errorMsg"
-                  dense
-                  outlined
-                  type="error"
-                >
-                  {{errorMsg}}
-              </v-alert>
-
-              <v-alert
-                v-if="successMsg"
+                v-if="responseMessage"
                 dense
                 outlined
-                type="success"
+                v-bind:type="tipeMessage"
               >
-                {{successMsg}}
+                {{responseMessage}}
             </v-alert>
 
       </v-col>
@@ -57,7 +47,7 @@
   >
 
     <v-list three-line align="center">
-      <template v-for="feed in feeds">
+      <template v-for="feed in this.$store.state.feeds">
 
           <v-list-item
           :key="feed.title"
@@ -83,7 +73,6 @@
 </template>
 
 <script>
-
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
 export default {
   data() {
@@ -96,17 +85,18 @@ export default {
       loading: false,
       isFormValid: false,
       successMsg: '',
-      feeds: ''
+      tipeMessage: '',
+      responseMessage: '',
     };
   },
   methods: {
     handleError(error){
-         this.errorMsg = error          
-         setTimeout(() => this.errorMsg = '', 3000)
+         this.responseMessage = error          
+         this.tipeMessage = 'error'
     },
     async submitFeed() {
       if(!this.loading){
-        var success = true
+        var response ;
         try{
             
             this.loading = true
@@ -114,28 +104,24 @@ export default {
               'link': this.url,
             }
             var service = new SubscriptionFeed() 
-            await (service.addFeed(credentials));
-            
-          
+            response = await (service.addFeed(credentials));
+            this.$store.commit('addFeed', response.data)
+            this.tipeMessage = 'success'
+            this.responseMessage = 'Subscription was created successfully'
+            this.$forceUpdate()
+           
           }
         catch(error){
-            success = false
+       
             var message = ''
             if(error.response.status == 400){
-                message = (error.response.data.link[0])
+                message = ('Imposible to parse url')
             }
             else{
               message = error.response.data.message
             }
             this.handleError(message);
 
-        }
-        if(success){
-
-          this.successMsg = 'Subscription was created successfully'
-          setTimeout(() => this.successMsg = '', 3000)
-          this.getFeed()
-          this.$forceUpdate()
         }
         this.loading = false;
       }
@@ -144,7 +130,10 @@ export default {
     },
     async getFeed(){
         var service = new SubscriptionFeed();
-        this.feeds = await (service.getFeed());
+        var feeds = await (service.getFeed());
+        this.$store.commit('setFeed', feeds)
+
+  
     }
   },
   async mounted() {
