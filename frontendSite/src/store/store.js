@@ -11,7 +11,7 @@ const store = new Vuex.Store({
     addFeed (state, feed){
       state.feeds.push(feed);
     },
-    setFeed(state,feeds){
+    setFeeds(state,feeds){
       state.feeds = feeds
     }
   },

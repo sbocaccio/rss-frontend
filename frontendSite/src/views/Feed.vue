@@ -33,7 +33,7 @@
                 v-if="responseMessage"
                 dense
                 outlined
-                v-bind:type="tipeMessage"
+                v-bind:type="typeMessage"
               >
                 {{responseMessage}}
             </v-alert>
@@ -47,13 +47,15 @@
   >
 
     <v-list three-line align="center">
-      <template v-for="feed in this.$store.state.feeds">
+      <template v-for="feed in this.feeds">
 
           <v-list-item
           :key="feed.title"
         >
           <v-list-item-avatar>
-            <v-img :src="feed.image" />
+            <v-img 
+            v-if="feed.image"
+            :src="feed.image" />
         
           </v-list-item-avatar>
 
@@ -85,14 +87,14 @@ export default {
       loading: false,
       isFormValid: false,
       successMsg: '',
-      tipeMessage: '',
+      typeMessage: '',
       responseMessage: '',
     };
   },
   methods: {
     handleError(error){
          this.responseMessage = error          
-         this.tipeMessage = 'error'
+         this.typeMessage = 'error'
     },
     async submitFeed() {
       if(!this.loading){
@@ -106,7 +108,7 @@ export default {
             var service = new SubscriptionFeed() 
             response = await (service.addFeed(credentials));
             this.$store.commit('addFeed', response.data)
-            this.tipeMessage = 'success'
+            this.typeMessage = 'success'
             this.responseMessage = 'Subscription was created successfully'
             this.$forceUpdate()
            
@@ -128,18 +130,25 @@ export default {
 
 
     },
-    async getFeed(){
+    async getFeeds(){
         var service = new SubscriptionFeed();
-        var feeds = await (service.getFeed());
-        this.$store.commit('setFeed', feeds)
+        var feeds = await (service.getFeeds());
+        this.$store.commit('setFeeds', feeds)
 
   
     }
   },
+  computed: {
+    
+    feeds: function () {
+   
+      return this.$store.state.feeds
+    },
+  },
   async mounted() {
-      this.getFeed()
-  }
-
+      this.getFeeds()
+  },
+  
 };
 </script>
 

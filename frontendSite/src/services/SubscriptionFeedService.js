@@ -16,7 +16,7 @@ export default class SubscriptionFeed {
     return response
   }
    
-async getFeed() {
+async getFeeds() {
   var authService = new AuthService()
   var config = authService.headerWithToken()
   var resp = await axiosApiInstance

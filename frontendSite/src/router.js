@@ -1,7 +1,7 @@
 
 import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
-import AddFeed from "./views/AddFeed.vue";
+import Feed from "./views/Feed.vue";
 import Vue from "vue";
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
@@ -18,9 +18,9 @@ const routes = [
     component: Register,
   },
   {
-    path: "/addfeed",
-    name: "addfeed",
-    component: AddFeed,
+    path: "/feed",
+    name: "feed",
+    component: Feed,
   },
 ];
 

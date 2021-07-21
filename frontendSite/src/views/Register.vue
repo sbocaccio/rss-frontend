@@ -138,7 +138,7 @@ export default {
           }
           var authService = new AuthService() 
           await (authService.signUp(credentials));
-          this.$router.push({ name: 'addfeed'});
+          this.$router.push({ name: 'feed'});
     
         }
         catch (error) {
