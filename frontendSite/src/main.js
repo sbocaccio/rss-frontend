@@ -9,6 +9,7 @@ Vue.config.productionTip = false
 Vue.use(Vuelidate);
 // set auth header
 
+
 new Vue({
   router,
   vuetify,

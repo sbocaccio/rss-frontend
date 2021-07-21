@@ -1,6 +1,6 @@
 import AuthService from './AuthService.js';
 import axiosApiInstance from './index.js';
-const url = 'http://127.0.0.1:8000/main_app/';
+import url from '@/settings/settings.js';
 export default class SubscriptionFeed {
   
 
