@@ -120,9 +120,15 @@ export default {
           }
         catch(error){
             success = false
-            var message = error.response.data.message
+            var message = ''
+            if(error.response.status == 400){
+                message = (error.response.data.link[0])
+            }
+            else{
+              message = error.response.data.message
+            }
             this.handleError(message);
-            
+
         }
         if(success){
 
