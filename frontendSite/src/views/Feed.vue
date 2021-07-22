@@ -66,11 +66,11 @@
           <v-btn
           class="mr-4"
           @click="getArticles(feed.id)"
-          :loading="loading"
-          
+      
+    
 
          >
-         Reed
+         Read
       </v-btn>
      
           </v-list-item>
