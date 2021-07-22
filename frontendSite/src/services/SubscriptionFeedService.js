@@ -32,7 +32,6 @@ async getArticles(subscription_id){
   var resp = await axiosApiInstance
   .get(page_url, config
   )
-  console.log((resp.data[0]))
   return (resp.data);
 
 }
