@@ -19,7 +19,14 @@ export default class AuthService {
     .post(url + 'register/', credentials);
     
     if(response.status == '200'){ this.savetokens(response.data) }
-    
   }
  
+  headerWithToken(){
+    var token =  window.localStorage.getItem('access_token')
+    var config = {
+      headers: { Authorization: `Bearer ` + token}
+     }
+    return config
+  }
+
 }
