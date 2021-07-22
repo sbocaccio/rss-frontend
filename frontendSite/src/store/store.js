@@ -5,7 +5,9 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    feeds: []
+    feeds: [],
+    articles: [],
+    subscription:[],
   },
   mutations: {
     addFeed (state, feed){
@@ -13,6 +15,12 @@ const store = new Vuex.Store({
     },
     setFeeds(state,feeds){
       state.feeds = feeds
+    },
+    setArticles(state,articles){
+      state.articles =articles 
+    },
+    setSubscriptionId(state,id){
+      state.subscription =id 
     }
   },
 })

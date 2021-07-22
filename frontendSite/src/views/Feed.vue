@@ -2,7 +2,7 @@
 <template>
     
 <div id="app" >
-  <v-app id="login">
+  <v-app id="feed">
     <v-row>
       <v-col
         cols="12"
@@ -63,7 +63,16 @@
           <v-list-item-title v-html="feed.title"></v-list-item-title>
 
           </v-list-item-content>
+          <v-btn
+          class="mr-4"
+          @click="getArticles(feed.id)"
+          :loading="loading"
+          
 
+         >
+         Reed
+      </v-btn>
+     
           </v-list-item>
       </template>
     </v-list>
@@ -95,6 +104,13 @@ export default {
     handleError(error){
          this.responseMessage = error          
          this.typeMessage = 'error'
+    },
+    
+    async getArticles(subscription_id){
+
+        localStorage.setItem('subscription_id', subscription_id);
+        this.$router.push({ name: 'articles'});
+
     },
     async submitFeed() {
       if(!this.loading){

@@ -25,5 +25,16 @@ async getFeeds() {
   )
   return (resp.data);
 }
+async getArticles(subscription_id){
+  var authService = new AuthService()
+  var config = authService.headerWithToken()
+  var page_url = url + 'subscriptions/'+ subscription_id.toString() + '/'+ 'articles/'
+  var resp = await axiosApiInstance
+  .get(page_url, config
+  )
+  console.log(resp)
+  return (resp.data);
+
+}
 
 }
