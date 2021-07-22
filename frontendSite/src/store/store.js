@@ -7,7 +7,6 @@ const store = new Vuex.Store({
   state: {
     feeds: [],
     articles: [],
-    subscription:[],
   },
   mutations: {
     addFeed (state, feed){
@@ -19,9 +18,6 @@ const store = new Vuex.Store({
     setArticles(state,articles){
       state.articles =articles 
     },
-    setSubscriptionId(state,id){
-      state.subscription =id 
-    }
   },
 })
 export default store;
