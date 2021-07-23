@@ -1,56 +1,61 @@
 
-<template> 
-<div>
-  <template v-for="article in this.articles">
+<template>
+  <div>
 
-         <v-card
-          elevation="2"    
-          v-bind:key=article.id
-        >
-            <v-card-title>{{article.title}}</v-card-title>
-            <v-card-text>{{article.summary}}</v-card-text>
-            <v-card-actions> 
-                <v-btn
-                class="mr-4"
-                @click="goToPage(article.link)"
-                >Link
-                </v-btn>
-            </v-card-actions> 
-        </v-card>
-
+    <v-alert
+        v-if="responseMessage"
+        dense
+        outlined
+        type="error"
+    >
+      {{ responseMessage }}
+    </v-alert>
+    <template v-for="article in this.articles">
+      <Article :article="article" :key="article.id"/>
     </template>
 
-</div>
+
+  </div>
 </template>
 <script>
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
+import Article from './Article.vue';
+
 export default {
+  components: {Article},
+  data() {
+    return {
+      responseMessage: '',
+    };
+  },
   methods: {
-      async getArticles(){
-        var id =  window.localStorage.getItem('subscription_id');
-        var service = new SubscriptionFeed();
-        var articles = await (service.getArticles(id ));
-        this.sortByDate(articles)
+    async getArticles() {
+
+      var subscription_id = this.$route.params.subscriptionId;
+      var service = new SubscriptionFeed();
+
+      try {
+        var articles = await (service.getArticles(subscription_id));
         this.$store.commit('setArticles', articles)
-    },
-      goToPage(link){
-          window.open(link, "_blank");    
-      }, 
-      sortByDate(articles){
-          for (let i = 0; i < articles.length; i++) {
-              articles[i].date_time = Date.parse(articles[i].date_time)
-            }
-          articles.sort((articleA, articleB) => (articleA.date_time < articleB.date_time) ? 1 : -1)
+      } catch (error) {
+        console.log(error.response.data.detail)
+        this.responseMessage = error.response.data.detail
+
       }
 
-  },  
+
+    },
+  },
   async mounted() {
-        this.getArticles()
+    try {
+      this.getArticles()
+    } catch {
+      console.log('mal ahi')
+    }
   },
   computed: {
-    
     articles: function () {
-   
+
       return this.$store.state.articles
     },
   },
