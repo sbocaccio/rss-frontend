@@ -1,4 +1,3 @@
-
 <template>
   <div>
 
@@ -10,8 +9,15 @@
     >
       {{ responseMessage }}
     </v-alert>
-    <template v-for="article in this.articles">
-      <Article :article="article" :key="article.id"/>
+    <template v-for="userArticle in articles">
+      <v-skeleton-loader
+          :key="userArticle.id"
+          v-if="loading"
+          class="mx-auto"
+          max-width="300"
+          type="card"
+      ></v-skeleton-loader>
+      <Article :userArticle="userArticle" :key="userArticle.id"/>
     </template>
 
 
@@ -20,12 +26,14 @@
 <script>
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
 import Article from './Article.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {Article},
   data() {
     return {
       responseMessage: '',
+      loading: false
     };
   },
   methods: {
@@ -33,31 +41,24 @@ export default {
 
       var subscription_id = this.$route.params.subscriptionId;
       var service = new SubscriptionFeed();
-
+      this.loading = true
       try {
         var articles = await (service.getArticles(subscription_id));
         this.$store.commit('setArticles', articles)
       } catch (error) {
-        console.log(error.response.data.detail)
         this.responseMessage = error.response.data.detail
-
       }
-
+      this.loading = false
 
     },
   },
   async mounted() {
-    try {
-      this.getArticles()
-    } catch {
-      console.log('mal ahi')
-    }
+    this.getArticles()
   },
   computed: {
-    articles: function () {
-
-      return this.$store.state.articles
-    },
+    ...mapGetters([
+      'articles'
+    ])
   },
 };
 </script>

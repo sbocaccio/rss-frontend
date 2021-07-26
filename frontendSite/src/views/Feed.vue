@@ -64,7 +64,7 @@
               </v-list-item-content>
               <v-btn
                   class="mr-4"
-                  @click="getArticles(feed.id)"
+                  @click="goToArticles(feed.id)"
 
 
               >
@@ -105,7 +105,7 @@ export default {
       this.typeMessage = 'error'
     },
 
-    async getArticles(subscriptionId) {
+    async goToArticles(subscriptionId) {
       this.$router.push({name: 'articles', params: {subscriptionId: subscriptionId}});
     },
     async submitFeed() {
@@ -141,11 +141,13 @@ export default {
 
     },
     async getFeeds() {
-      var service = new SubscriptionFeed();
-      var feeds = await (service.getFeeds());
-      this.$store.commit('setFeeds', feeds)
-
-
+      try {
+        var service = new SubscriptionFeed();
+        var feeds = await (service.getFeeds());
+        this.$store.commit('setFeeds', feeds)
+      }catch(error){
+        this.handleError(error.response.data.message);
+      }
     }
   },
   computed: {

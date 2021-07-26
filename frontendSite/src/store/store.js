@@ -19,5 +19,13 @@ const store = new Vuex.Store({
             state.articles = articles
         },
     },
+    getters: {
+        feeds: state => {
+            return state.feeds
+        },
+        articles: state  => {
+            return state.articles
+        }
+    }
 })
 export default store;
