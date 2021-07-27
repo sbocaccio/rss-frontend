@@ -53,7 +53,7 @@ export default {
     },
   },
   async mounted() {
-    this.getArticles()
+    await this.getArticles()
   },
   computed: {
     ...mapGetters([
