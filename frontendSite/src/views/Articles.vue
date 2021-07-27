@@ -9,14 +9,17 @@
     >
       {{ responseMessage }}
     </v-alert>
+
+
+    <v-skeleton-loader
+        v-if="loading"
+        class="mx-auto"
+        max-width="900"
+        max-height="900"
+        type="card"
+    ></v-skeleton-loader>
+
     <template v-for="userArticle in articles">
-      <v-skeleton-loader
-          :key="userArticle.id"
-          v-if="loading"
-          class="mx-auto"
-          max-width="300"
-          type="card"
-      ></v-skeleton-loader>
       <Article :userArticle="userArticle" :key="userArticle.id"/>
     </template>
 
@@ -26,7 +29,7 @@
 <script>
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
 import Article from './Article.vue';
-import { mapGetters } from 'vuex';
+import {mapGetters} from 'vuex';
 
 export default {
   components: {Article},

@@ -2,7 +2,9 @@
   <v-card
       elevation="2"
   >
-    <v-card-title v-if="userArticle.article.title">{{ userArticle.article.title }}</v-card-title>
+    <v-card-title v-if="userArticle.article.title" @click="goToPage(userArticle.article.link)"
+    >{{ userArticle.article.title }}
+    </v-card-title>
     <v-card-text>{{ userArticle.article.summary }}</v-card-text>
     <v-card-actions>
       <v-btn

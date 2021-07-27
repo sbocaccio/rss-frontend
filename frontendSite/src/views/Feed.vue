@@ -158,7 +158,7 @@ export default {
     },
   },
   async mounted() {
-    this.getFeeds()
+    await this.getFeeds()
   },
 
 };
