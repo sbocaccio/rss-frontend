@@ -7,16 +7,13 @@
     </v-card-title>
     <v-card-text>{{ userArticle.article.summary }}</v-card-text>
     <v-card-actions>
-      <v-btn
-          class="mr-4"
-          @click="goToPage(userArticle.article.link)"
-      >Link
-      </v-btn>
+
       <v-img
           v-if="userArticle.article.image"
           :src="userArticle.article.image"
           max-height="150"
           max-width="250"
+          @click="goToPage(userArticle.article.link)"
       />
 
     </v-card-actions>

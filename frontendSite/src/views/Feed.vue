@@ -5,7 +5,6 @@
       <v-row>
         <v-col
             cols="12"
-            sm="6"
             offset-sm="3"
         >
           <v-form v-model="isFormValid">
@@ -41,37 +40,42 @@
       </v-row>
 
       <v-card
-          max-width="900"
+          max-width="1800"
           class="action"
       >
 
-        <v-list three-line align="center">
+        <v-list three-line  align="left"
+
+        >
           <template v-for="feed in this.feeds">
 
             <v-list-item
+
                 :key="feed.title"
+
             >
-              <v-list-item-avatar>
-                <v-img
-                    v-if="feed.image"
-                    :src="feed.image"/>
 
-              </v-list-item-avatar>
+                <v-list-item-avatar  size="60" >
+                  <v-img
+                      v-if="feed.image"
+                      :src="feed.image"/>
 
-              <v-list-item-content>
-                <v-list-item-title v-html="feed.title"></v-list-item-title>
+                </v-list-item-avatar>
 
-              </v-list-item-content>
-              <v-btn
-                  class="mr-4"
-                  @click="goToArticles(feed.id)"
+                <v-list-item-content >
+                  <v-list-item-title > <p class="content">{{feed.title}} </p>
+                  </v-list-item-title>
 
-
-              >
-                Read
-              </v-btn>
+                </v-list-item-content >
+                <v-btn
+                    class="mr-4"
+                    @click="goToArticles(feed.id)"
+                >
+                  Read
+                </v-btn>
 
             </v-list-item>
+
           </template>
         </v-list>
       </v-card>
@@ -145,7 +149,7 @@ export default {
         var service = new SubscriptionFeed();
         var feeds = await (service.getFeeds());
         this.$store.commit('setFeeds', feeds)
-      }catch(error){
+      } catch (error) {
         this.handleError(error.response.data.message);
       }
     }
@@ -171,5 +175,12 @@ export default {
   align-items: left;
   justify-content: left;
   height: 100vh;
+}
+
+.content {
+  font-size: 30px;
+  size: A4;
+  width: available;
+
 }
 </style>
