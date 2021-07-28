@@ -12,16 +12,21 @@ s
           no-gutters
       >
         <template v-if="loggedin">
-          <v-btn
-              color="green"
-              text
-              rounded
-              class="my-2"
-              @click="logout"
+          <v-col>
+            <v-btn
+                color="green"
+                text
+                rounded
+                class="my-2"
+                @click="logout"
 
-          >
-            Log out
-          </v-btn>
+            >
+              Log out
+            </v-btn>
+          </v-col>
+          <v-col align-self="end">
+            <v-text-area> User: {{username}}</v-text-area>
+          </v-col>
         </template>
         <template v-else>
           <v-btn
@@ -59,9 +64,11 @@ export default {
       'register',
     ],
     'loggedin': false,
+    'username': ''
   }),
   updated() {
     this.loggedin = localStorage.getItem('loggedin');
+    this.username = localStorage.getItem('username');
   },
   methods: {
     logout() {

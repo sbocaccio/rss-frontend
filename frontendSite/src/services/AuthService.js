@@ -14,6 +14,7 @@ export default class AuthService {
 
         if (response.status == '200') {
             this.savetokens(response.data)
+            localStorage.setItem('username', credentials.username);
         }
     }
 
