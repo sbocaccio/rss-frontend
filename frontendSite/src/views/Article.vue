@@ -15,7 +15,6 @@
           max-width="250"
           @click="goToPage(userArticle.article.link)"
       />
-
     </v-card-actions>
   </v-card>
 </template>

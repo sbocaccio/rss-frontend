@@ -68,7 +68,7 @@
                 outlined
                 type="error"
             >
-              {{msg}}
+              {{ msg }}
             </v-alert>
           </v-card>
         </v-col>
@@ -110,7 +110,7 @@ export default {
           }
           var authService = new AuthService()
           await (authService.login(credentials));
-
+          localStorage.setItem('loggedin', true);
           this.$router.push({name: 'feed'});
 
         } catch (error) {
@@ -120,6 +120,8 @@ export default {
         this.loading = false;
       }
     }
-  }
+  },
+  mounted() {
+  },
 };
 </script>

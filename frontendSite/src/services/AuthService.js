@@ -33,5 +33,4 @@ export default class AuthService {
         }
         return config
     }
-
 }

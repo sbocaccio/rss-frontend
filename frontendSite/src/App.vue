@@ -1,4 +1,5 @@
-s<template>
+s
+<template>
 
   <div id="app" class="app">
     <v-footer
@@ -10,18 +11,30 @@ s<template>
           justify="center"
           no-gutters
       >
-        <v-btn
-            v-for="link in links"
-            :key="link"
-            color="green"
-            text
-            rounded
-            class="my-2"
+        <template v-if="loggedin">
+          <v-btn
+              color="green"
+              text
+              rounded
+              class="my-2"
+              @click="logout"
 
-
-        >
-          <router-link :to="{name: link}">{{link}}</router-link>
-        </v-btn>
+          >
+            Log out
+          </v-btn>
+        </template>
+        <template v-else>
+          <v-btn
+              v-for="link in notLoggedinLinks"
+              :key="link"
+              color="green"
+              text
+              rounded
+              class="my-2"
+          >
+            <router-link :to="{name: link}">{{ link }}</router-link>
+          </v-btn>
+        </template>
         <v-col
             class="primary lighten-2 py-4 text-center white--text"
             cols="12"
@@ -41,12 +54,21 @@ export default {
   name: 'App',
   components: {},
   data: () => ({
-    links: [
+    notLoggedinLinks: [
       'login',
       'register',
-
     ],
+    'loggedin': false,
   }),
+  updated() {
+    this.loggedin = localStorage.getItem('loggedin');
+  },
+  methods: {
+    logout() {
+      localStorage.clear()
+      this.$router.push({name: 'login'});
+    }
+  }
 }
 </script>
 
