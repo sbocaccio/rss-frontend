@@ -1,55 +1,52 @@
+s<template>
 
-<template>
+  <div id="app" class="app">
+    <v-footer
+        class="success"
+        padless
 
-<div id="app" class= "app" >
-  <v-footer
-    class="success"
-    padless
-
-  >
-    <v-row
-      justify="center"
-      no-gutters
     >
-      <v-btn
-        v-for="link in links"
-        :key="link"
-        color="green"
-        text
-        rounded
-        class="my-2"
-        
-        
+      <v-row
+          justify="center"
+          no-gutters
       >
-       <router-link :to="{name: link}">{{link}}</router-link>
-      </v-btn>
-      <v-col
-        class="primary lighten-2 py-4 text-center white--text"
-        cols="12"
-      >   
-      </v-col>
-    </v-row>
-  </v-footer>
+        <v-btn
+            v-for="link in links"
+            :key="link"
+            color="green"
+            text
+            rounded
+            class="my-2"
 
-  <router-view></router-view>
-  
 
-</div>
+        >
+          <router-link :to="{name: link}">{{link}}</router-link>
+        </v-btn>
+        <v-col
+            class="primary lighten-2 py-4 text-center white--text"
+            cols="12"
+        >
+        </v-col>
+      </v-row>
+    </v-footer>
+
+    <router-view></router-view>
+
+
+  </div>
 </template>
 <script>
 
 export default {
   name: 'App',
-  components: {
-    
-  },  
+  components: {},
   data: () => ({
-      links: [
-        'login',
-        'register',
-      
-      ],
-    }),
+    links: [
+      'login',
+      'register',
+
+    ],
+  }),
 }
 </script>
 
