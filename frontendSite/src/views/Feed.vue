@@ -7,7 +7,7 @@
             cols="12"
             offset-sm="3"
         >
-          <v-form v-model="isFormValid">
+          <v-form v-model="isFormValid" reset>
             <v-text-field
                 v-model="url"
 
@@ -127,6 +127,7 @@ export default {
           this.$store.commit('addFeed', response.data)
           this.typeMessage = 'success'
           this.responseMessage = 'Subscription was created successfully'
+          this.url = ' '
           this.$forceUpdate()
 
         } catch (error) {

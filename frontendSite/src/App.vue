@@ -25,7 +25,7 @@ s
             </v-btn>
           </v-col>
           <v-col align-self="end">
-            <v-text-area> User: {{username}}</v-text-area>
+             User: {{username}}
           </v-col>
         </template>
         <template v-else>
@@ -67,6 +67,10 @@ export default {
     'username': ''
   }),
   updated() {
+    this.loggedin = localStorage.getItem('loggedin');
+    this.username = localStorage.getItem('username');
+  },
+  mounted() {
     this.loggedin = localStorage.getItem('loggedin');
     this.username = localStorage.getItem('username');
   },
