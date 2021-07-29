@@ -1,4 +1,3 @@
-s
 <template>
 
   <div id="app" class="app">
@@ -67,16 +66,18 @@ export default {
     'username': ''
   }),
   updated() {
-    this.loggedin = localStorage.getItem('loggedin');
-    this.username = localStorage.getItem('username');
+    this.loggedin = this.$store.getters.isAuthenticated;
+    this.username = this.$store.getters.username;
+
   },
   mounted() {
-    this.loggedin = localStorage.getItem('loggedin');
-    this.username = localStorage.getItem('username');
+    this.loggedin = this.$store.getters.isAuthenticated;
+    this.username = this.$store.getters.username;
   },
   methods: {
     logout() {
       localStorage.clear()
+      this.$store.commit('setAuthentication', false)
       this.$router.push({name: 'login'});
     }
   }

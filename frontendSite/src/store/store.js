@@ -8,6 +8,7 @@ const store = new Vuex.Store({
         feeds: [],
         articles: [],
         isAuthenticated: false,
+        username: ''
     },
     mutations: {
         addFeed(state, feed) {
@@ -23,6 +24,10 @@ const store = new Vuex.Store({
             state.isAuthenticated = loginState
 
         },
+        setUsername(state,username){
+            state.username = username
+
+        },
     },
     getters: {
         feeds: state => {
@@ -33,6 +38,9 @@ const store = new Vuex.Store({
         },
         isAuthenticated: state => {
             return state.isAuthenticated
+        } ,
+        username: state => {
+            return state.username
         }
     }
 })

@@ -5,6 +5,7 @@ import Articles from "./views/Articles.vue";
 
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "./store/store.js";
 Vue.use(VueRouter);
 
 const routes = [
@@ -33,7 +34,7 @@ const routes = [
         }
     },
     {
-        path: "/articles/:subscriptionId'",
+        path: "/articles/:subscriptionId",
         name: "articles",
         component: Articles,
         props: true,
@@ -50,8 +51,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    var authenticated = localStorage.getItem('loggedin');
-
+    var authenticated = store.getters["isAuthenticated"];
     if (!to.meta.public) {
         if (authenticated) {
             next();
