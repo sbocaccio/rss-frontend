@@ -7,7 +7,7 @@
             cols="12"
             offset-sm="3"
         >
-          <v-form v-model="isFormValid">
+          <v-form v-model="isFormValid" reset>
             <v-text-field
                 v-model="url"
 
@@ -44,10 +44,10 @@
           class="action"
       >
 
-        <v-list three-line  align="left"
+        <v-list three-line align="left"
 
         >
-          <template v-for="feed in this.feeds">
+          <template v-for="feed in feeds">
 
             <v-list-item
 
@@ -55,24 +55,24 @@
 
             >
 
-                <v-list-item-avatar  size="60" >
-                  <v-img
-                      v-if="feed.image"
-                      :src="feed.image"/>
+              <v-list-item-avatar size="60">
+                <v-img
+                    v-if="feed.image"
+                    :src="feed.image"/>
 
-                </v-list-item-avatar>
+              </v-list-item-avatar>
 
-                <v-list-item-content >
-                  <v-list-item-title > <p class="content">{{feed.title}} </p>
-                  </v-list-item-title>
+              <v-list-item-content>
+                <v-list-item-title><p class="content">{{ feed.title }} </p>
+                </v-list-item-title>
 
-                </v-list-item-content >
-                <v-btn
-                    class="mr-4"
-                    @click="goToArticles(feed.id)"
-                >
-                  Read
-                </v-btn>
+              </v-list-item-content>
+              <v-btn
+                  class="mr-4"
+                  @click="goToArticles(feed.id)"
+              >
+                Read
+              </v-btn>
 
             </v-list-item>
 
@@ -87,6 +87,7 @@
 
 <script>
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
+import {mapGetters} from 'vuex'
 
 export default {
   data() {
@@ -126,6 +127,7 @@ export default {
           this.$store.commit('addFeed', response.data)
           this.typeMessage = 'success'
           this.responseMessage = 'Subscription was created successfully'
+          this.url = ' '
           this.$forceUpdate()
 
         } catch (error) {
@@ -141,8 +143,6 @@ export default {
         }
         this.loading = false;
       }
-
-
     },
     async getFeeds() {
       try {
@@ -156,14 +156,14 @@ export default {
   },
   computed: {
 
-    feeds: function () {
-
-      return this.$store.state.feeds
-    },
+    ...mapGetters([
+      'feeds',
+    ])
   },
   async mounted() {
     await this.getFeeds()
   },
+
 
 };
 </script>

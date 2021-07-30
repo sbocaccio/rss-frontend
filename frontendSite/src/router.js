@@ -5,7 +5,7 @@ import Articles from "./views/Articles.vue";
 
 import Vue from "vue";
 import VueRouter from "vue-router";
-
+import store from "./store/store.js";
 Vue.use(VueRouter);
 
 const routes = [
@@ -13,28 +13,59 @@ const routes = [
         path: "/login",
         name: "login",
         component: Login,
+        meta: {
+            public: true
+        }
     },
     {
         path: "/register",
         name: "register",
         component: Register,
+        meta: {
+            public: true
+        }
     },
     {
         path: "/feed",
         name: "feed",
         component: Feed,
+        meta: {
+            public: false
+        }
     },
     {
-        path: "/articles/:subscriptionId'",
+        path: "/articles/:subscriptionId",
         name: "articles",
         component: Articles,
         props: true,
+        meta: {
+            public: false
+        }
     },
 ];
 
 const router = new VueRouter({
     mode: "history",
     routes,
+
 });
 
+router.beforeEach((to, from, next) => {
+    var authenticated = store.getters["isAuthenticated"];
+    if (!to.meta.public) {
+        if (authenticated) {
+            next();
+        } else {
+            next({name: 'login'});
+        }
+    }
+    else{
+        if (!authenticated) {
+            next();
+        } else {
+            next({name: 'feed'});
+        }
+    }
+    next();
+});
 export default router;

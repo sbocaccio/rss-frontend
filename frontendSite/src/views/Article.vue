@@ -1,10 +1,25 @@
+
+<style>
+a {
+  text-decoration: none;
+  color: black;
+}
+
+</style>
+
+
 <template>
   <v-card
-      elevation="2"
+
   >
-    <v-card-title v-if="userArticle.article.title" @click="goToPage(userArticle.article.link)"
-    >{{ userArticle.article.title }}
+    <v-card-title v-if="userArticle.article.title"
+                  @click="goToPage()"
+                  to="userArticle.article.title"
+    >
+      <a class="section-link active" data-scroll="" href="userArticle.article.link">    {{ userArticle.article.title }}</a>
+
     </v-card-title>
+
     <v-card-text>{{ userArticle.article.summary }}</v-card-text>
     <v-card-actions>
 
@@ -15,7 +30,6 @@
           max-width="250"
           @click="goToPage(userArticle.article.link)"
       />
-
     </v-card-actions>
   </v-card>
 </template>
