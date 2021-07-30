@@ -1,11 +1,15 @@
 import axiosApiInstance from './index.js';
+import store from "../store/store.js";
 
 import url from '@/settings/settings.js';
+
 export default class AuthService {
 
-    savetokens(responseData) {
+    saveUserData(responseData, username) {
         localStorage.setItem('access_token', responseData.access);
         localStorage.setItem('refresh_token', responseData.refresh);
+        store.commit('setUsername', username)
+
     }
 
     async login(credentials) {
@@ -13,7 +17,8 @@ export default class AuthService {
             .post(url + 'login/', credentials);
 
         if (response.status == '200') {
-            this.savetokens(response.data)
+            this.saveUserData(response.data, credentials.username)
+
         }
     }
 
@@ -22,7 +27,7 @@ export default class AuthService {
             .post(url + 'register/', credentials);
 
         if (response.status == '200') {
-            this.savetokens(response.data)
+            this.saveUserData(response.data, credentials.username)
         }
     }
 
@@ -33,5 +38,4 @@ export default class AuthService {
         }
         return config
     }
-
 }

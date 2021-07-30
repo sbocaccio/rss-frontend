@@ -1,6 +1,7 @@
 const axios = require('axios');
 const axiosApiInstance = axios.create();
 const refresh_url = 'http://127.0.0.1:8000/token/refresh/';
+import store from "../store/store.js";
 
 
 async function refreshAccessToken() {
@@ -19,10 +20,10 @@ async function retryRequestRefreshingAccessToken(request) {
         await refreshAccessToken();
         var new_token = window.localStorage.getItem('access_token')
         request.headers.Authorization = 'Bearer ' + new_token
+        store.commit.isAuthenticated(true)
         return axiosApiInstance(request);
-
     } catch (refresh_error) {
-
+        store.commit.isAuthenticated(false)
         return Promise.reject(refresh_error)
     }
 }
