@@ -19,7 +19,7 @@
             <v-btn
                 class="mr-4"
                 @click="submitFeed"
-                :loading="loading"
+                :loading="loadingButtonIndex== -1 "
                 :disabled="!isFormValid"
 
             >
@@ -47,7 +47,7 @@
         <v-list three-line align="left"
 
         >
-          <template v-for="feed in feeds">
+          <template v-for="(feed,index) in feeds" >
 
             <v-list-item
 
@@ -75,7 +75,9 @@
               </v-btn>
               <v-btn
                   class="mr-4"
-                  @click="removeFeed(feed)"
+                  @click="removeFeed(feed,index)"
+                  :loading="loadingButtonIndex == index"
+
 
 
               >
@@ -98,8 +100,9 @@
 <script>
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
 import {mapGetters} from 'vuex'
-import ConfirmDialogue from './ConfirmDialogue.vue';
-
+import ConfirmDialogue from '../shared_components/ConfirmDialogue.vue';
+const NOT_BUTTONS_LOADING = -2;
+const SUBMIT_BUTTON_INDEX = -1;
 
 export default {
   components: {ConfirmDialogue},
@@ -115,6 +118,8 @@ export default {
       successMsg: '',
       typeMessage: '',
       responseMessage: '',
+      loadingButtonIndex: 'NOT_BUTTONS_LOADING ',
+
     };
   },
   methods: {
@@ -128,9 +133,9 @@ export default {
     },
     async submitFeed() {
       if (!this.loading) {
+        this.loadingButtonIndex = SUBMIT_BUTTON_INDEX
         var response;
         try {
-
           this.loading = true
           const credentials = {
             'link': this.url,
@@ -141,8 +146,6 @@ export default {
           this.typeMessage = 'success'
           this.responseMessage = 'Subscription was created successfully'
           this.url = ' '
-          this.$forceUpdate()
-
         } catch (error) {
 
           var message = ''
@@ -152,34 +155,34 @@ export default {
             message = error.response.data.message
           }
           this.handleError(message);
-
         }
+        this.loadingButtonIndex= NOT_BUTTONS_LOADING
         this.loading = false;
       }
     },
-    async removeFeed(subscription) {
+    async removeFeed(subscription,index) {
       if (!this.loading) {
+        this.loading = true
         const confirmedDeletion = await this.$refs.confirmDialogue.show({
           title: 'Delete subscription',
           message: 'Are you sure you want to remove your subscription?',
           okButton: 'Delete',
         })
         if (confirmedDeletion) {
+          this.loadingButtonIndex= index
           try {
-            this.loading = true
             var service = new SubscriptionFeed()
             await (service.removeFeed(subscription.id));
             this.$store.commit('removeFeed', subscription)
-            this.typeMessage = 'success'
-            this.responseMessage = 'Subscription was deleted successfully'
-            this.$forceUpdate()
           } catch (error) {
             var message = error.response.data.message
             this.handleError(message);
           }
         }
+        this.loading = false;
+        this.loadingButtonIndex= NOT_BUTTONS_LOADING
       }
-      this.loading = false;
+
     },
     async getFeeds() {
       try {
@@ -192,7 +195,6 @@ export default {
     }
   },
   computed: {
-
     ...mapGetters([
       'feeds',
     ])
