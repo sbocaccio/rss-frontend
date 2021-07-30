@@ -73,10 +73,20 @@
               >
                 Read
               </v-btn>
+              <v-btn
+                  class="mr-4"
+                  @click="removeFeed(feed)"
+
+
+              >
+
+                Delete
+              </v-btn>
 
             </v-list-item>
 
           </template>
+          <confirm-dialogue ref="confirmDialogue"></confirm-dialogue>
         </v-list>
       </v-card>
     </v-app>
@@ -88,8 +98,11 @@
 <script>
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
 import {mapGetters} from 'vuex'
+import ConfirmDialogue from './ConfirmDialogue.vue';
+
 
 export default {
+  components: {ConfirmDialogue},
   data() {
     return {
       rules: {
@@ -143,6 +156,30 @@ export default {
         }
         this.loading = false;
       }
+    },
+    async removeFeed(subscription) {
+      if (!this.loading) {
+        const confirmedDeletion = await this.$refs.confirmDialogue.show({
+          title: 'Delete subscription',
+          message: 'Are you sure you want to remove your subscription?',
+          okButton: 'Delete',
+        })
+        if (confirmedDeletion) {
+          try {
+            this.loading = true
+            var service = new SubscriptionFeed()
+            await (service.removeFeed(subscription.id));
+            this.$store.commit('removeFeed', subscription)
+            this.typeMessage = 'success'
+            this.responseMessage = 'Subscription was deleted successfully'
+            this.$forceUpdate()
+          } catch (error) {
+            var message = error.response.data.message
+            this.handleError(message);
+          }
+        }
+      }
+      this.loading = false;
     },
     async getFeeds() {
       try {
