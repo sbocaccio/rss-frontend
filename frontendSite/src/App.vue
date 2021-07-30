@@ -10,7 +10,7 @@
           justify="center"
           no-gutters
       >
-        <template v-if="loggedin">
+        <template v-if="isAuthenticated">
           <v-col>
             <v-btn
                 color="green"
@@ -24,7 +24,7 @@
             </v-btn>
           </v-col>
           <v-col align-self="end">
-             User: {{username}}
+            User: {{username}}
           </v-col>
         </template>
         <template v-else>
@@ -54,6 +54,8 @@
 </template>
 <script>
 
+import {mapGetters} from "vuex";
+
 export default {
   name: 'App',
   components: {},
@@ -63,24 +65,21 @@ export default {
       'register',
     ],
     'loggedin': false,
-    'username': ''
   }),
-  updated() {
-    this.loggedin = this.$store.getters.isAuthenticated;
-    this.username = this.$store.getters.username;
-
-  },
-  mounted() {
-    this.loggedin = this.$store.getters.isAuthenticated;
-    this.username = this.$store.getters.username;
-  },
   methods: {
     logout() {
       localStorage.clear()
       this.$store.commit('setAuthentication', false)
       this.$router.push({name: 'login'});
     }
-  }
+  },
+  computed: {
+
+    ...mapGetters([
+      'isAuthenticated', 'username',
+    ])
+  },
 }
 </script>
+
 
