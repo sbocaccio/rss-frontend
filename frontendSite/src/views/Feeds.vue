@@ -49,7 +49,8 @@
 
         >
           <template v-for="(feed,index) in feeds">
-            <Feed :feed="feed" :index="index" :loadingButtonIndex="loadingButtonIndex" :key="feed.id" @removeFeed="removeFeed">
+            <Feed :feed="feed" :index="index" :loadingButtonIndex="loadingButtonIndex" :key="feed.id"
+                  @removeFeed="removeFeed">
 
             </Feed>
 
@@ -125,16 +126,15 @@ export default {
 
     },
     async removeFeed(subscription, index) {
-        this.loadingButtonIndex = index
-        try {
-          console.log('holaaa')
-          var service = new SubscriptionFeed()
-          await (service.removeFeed(subscription.id));
-          this.$store.commit('removeFeed', subscription)
-        } catch (error) {
-          var message = error.response.data.message
-          this.handleError(message);
-        }
+      this.loadingButtonIndex = index
+      try {
+        var service = new SubscriptionFeed()
+        await (service.removeFeed(subscription.id));
+        this.$store.commit('removeFeed', subscription)
+      } catch (error) {
+        var message = error.response.data.message
+        this.handleError(message);
+      }
 
       this.loadingButtonIndex = NOT_BUTTONS_LOADING
 
