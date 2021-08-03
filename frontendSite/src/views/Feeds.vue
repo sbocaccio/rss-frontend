@@ -54,8 +54,10 @@
             </Feed>
 
           </template>
-          <confirm-dialogue ref="confirmDialogue"></confirm-dialogue>
+
+
         </v-list>
+
       </v-card>
     </v-app>
   </div>
@@ -67,14 +69,13 @@
 import Feed from './Feed.vue';
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
 import {mapGetters} from 'vuex'
-import ConfirmDialogue from '../shared_components/ConfirmDialogue.vue';
-
+import ConfirmDialog from "../shared_components/ConfirmDialog";
 
 const NOT_BUTTONS_LOADING = -2;
 const SUBMIT_BUTTON_INDEX = -1;
 
 export default {
-  components: {ConfirmDialogue,Feed},
+  components: {Feed},
   data() {
     return {
       rules: {
@@ -124,17 +125,9 @@ export default {
 
     },
     async removeFeed(subscription, index) {
-      if (!this.loadingButtonIndex == NOT_BUTTONS_LOADING) {
-        return
-      }
-      const confirmedDeletion = await this.$refs.confirmDialogue.show({
-        title: 'Delete subscription',
-        message: 'Are you sure you want to remove your subscription?',
-        okButton: 'Delete',
-      })
-      if (confirmedDeletion) {
         this.loadingButtonIndex = index
         try {
+          console.log('holaaa')
           var service = new SubscriptionFeed()
           await (service.removeFeed(subscription.id));
           this.$store.commit('removeFeed', subscription)
@@ -142,7 +135,7 @@ export default {
           var message = error.response.data.message
           this.handleError(message);
         }
-      }
+
       this.loadingButtonIndex = NOT_BUTTONS_LOADING
 
     },
@@ -154,8 +147,10 @@ export default {
       } catch (error) {
         this.handleError(error.response.data.message);
       }
-    }
+    },
+
   },
+
   computed: {
     ...mapGetters([
       'feeds',
