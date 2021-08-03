@@ -47,7 +47,7 @@
         <v-list three-line align="left"
 
         >
-          <template v-for="(feed,index) in feeds" >
+          <template v-for="(feed,index) in feeds">
 
             <v-list-item
 
@@ -79,7 +79,6 @@
                   :loading="loadingButtonIndex == index"
 
 
-
               >
 
                 Delete
@@ -101,6 +100,7 @@
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
 import {mapGetters} from 'vuex'
 import ConfirmDialogue from '../shared_components/ConfirmDialogue.vue';
+
 const NOT_BUTTONS_LOADING = -2;
 const SUBMIT_BUTTON_INDEX = -1;
 
@@ -113,12 +113,11 @@ export default {
       },
       url: '',
       errorMsg: '',
-      loading: false,
       isFormValid: false,
       successMsg: '',
       typeMessage: '',
       responseMessage: '',
-      loadingButtonIndex: 'NOT_BUTTONS_LOADING ',
+      loadingButtonIndex: '-2',
 
     };
   },
@@ -132,56 +131,54 @@ export default {
       this.$router.push({name: 'articles', params: {subscriptionId: subscriptionId}});
     },
     async submitFeed() {
-      if (!this.loading) {
-        this.loadingButtonIndex = SUBMIT_BUTTON_INDEX
-        var response;
-        try {
-          this.loading = true
-          const credentials = {
-            'link': this.url,
-          }
-          var service = new SubscriptionFeed()
-          response = await (service.addFeed(credentials));
-          this.$store.commit('addFeed', response.data)
-          this.typeMessage = 'success'
-          this.responseMessage = 'Subscription was created successfully'
-          this.url = ' '
-        } catch (error) {
+      if (!this.loadingButtonIndex == NOT_BUTTONS_LOADING) {
+        return
+      }
+      this.loadingButtonIndex = SUBMIT_BUTTON_INDEX
+      var response;
+      try {
+        const credentials = {
+          'link': this.url,
+        }
+        var service = new SubscriptionFeed()
+        response = await (service.addFeed(credentials));
+        this.$store.commit('addFeed', response.data)
+        this.typeMessage = 'success'
+        this.responseMessage = 'Subscription was created successfully'
+        this.url = ' '
+      } catch (error) {
+        var message = ''
+        if (error.response.status == 400) {
+          message = ('Imposible to parse url')
+        } else {
+          message = error.response.data.message
+        }
+        this.handleError(message);
+      }
+      this.loadingButtonIndex = NOT_BUTTONS_LOADING
 
-          var message = ''
-          if (error.response.status == 400) {
-            message = ('Imposible to parse url')
-          } else {
-            message = error.response.data.message
-          }
+    },
+    async removeFeed(subscription, index) {
+      if (!this.loadingButtonIndex == NOT_BUTTONS_LOADING) {
+        return
+      }
+      const confirmedDeletion = await this.$refs.confirmDialogue.show({
+        title: 'Delete subscription',
+        message: 'Are you sure you want to remove your subscription?',
+        okButton: 'Delete',
+      })
+      if (confirmedDeletion) {
+        this.loadingButtonIndex = index
+        try {
+          var service = new SubscriptionFeed()
+          await (service.removeFeed(subscription.id));
+          this.$store.commit('removeFeed', subscription)
+        } catch (error) {
+          var message = error.response.data.message
           this.handleError(message);
         }
-        this.loadingButtonIndex= NOT_BUTTONS_LOADING
-        this.loading = false;
       }
-    },
-    async removeFeed(subscription,index) {
-      if (!this.loading) {
-        this.loading = true
-        const confirmedDeletion = await this.$refs.confirmDialogue.show({
-          title: 'Delete subscription',
-          message: 'Are you sure you want to remove your subscription?',
-          okButton: 'Delete',
-        })
-        if (confirmedDeletion) {
-          this.loadingButtonIndex= index
-          try {
-            var service = new SubscriptionFeed()
-            await (service.removeFeed(subscription.id));
-            this.$store.commit('removeFeed', subscription)
-          } catch (error) {
-            var message = error.response.data.message
-            this.handleError(message);
-          }
-        }
-        this.loading = false;
-        this.loadingButtonIndex= NOT_BUTTONS_LOADING
-      }
+      this.loadingButtonIndex = NOT_BUTTONS_LOADING
 
     },
     async getFeeds() {
