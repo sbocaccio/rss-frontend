@@ -47,5 +47,15 @@ export default class SubscriptionFeed {
         return response
 
     }
+    async refreshFeed(subscription_id){
+        var authService = new AuthService()
+        var config = authService.headerWithToken()
+        var response = await axiosApiInstance
+            .put(`${url}subscriptions/${subscription_id}/`,config
+            )
+        return response
+
+    }
+
 
 }

@@ -20,10 +20,9 @@ async function retryRequestRefreshingAccessToken(request) {
         await refreshAccessToken();
         var new_token = window.localStorage.getItem('access_token')
         request.headers.Authorization = 'Bearer ' + new_token
-        store.commit.isAuthenticated(true)
         return axiosApiInstance(request);
     } catch (refresh_error) {
-        store.commit.isAuthenticated(false)
+        store.commit('setAuthentication',false)
         return Promise.reject(refresh_error)
     }
 }
@@ -31,7 +30,6 @@ async function retryRequestRefreshingAccessToken(request) {
 // Response interceptor for API calls
 axiosApiInstance.interceptors.response.use((response) => {
     return response
-
 }, async function (error) {
     var originalRequest = error.config;
     if ((error.response.status === 403 || error.response.status === 401) && !originalRequest._retry) {
