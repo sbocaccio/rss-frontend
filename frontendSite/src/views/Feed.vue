@@ -46,13 +46,12 @@ export default {
       }
       this.$router.push({name: 'articles', params: {subscriptionId: subscriptionId}});
     },
-    removeFeed(confirmButtonPressed) {
-      if (confirmButtonPressed) {
-        if (this.loading) {
-          return
-        }
-        this.$emit("removeFeed", this.feed)
+    removeFeed() {
+      if (this.loading) {
+        return
       }
+      this.$emit("removeFeed", this.feed)
+
     },
   }
 }
