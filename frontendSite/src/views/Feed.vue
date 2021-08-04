@@ -35,13 +35,11 @@
 
 
 import ConfirmDialog from "../shared_components/ConfirmDialog";
-
 export default {
   components: {ConfirmDialog},
   props: ['feed', 'index', 'loadingButtonIndex'],
   methods: {
     async goToArticles(subscriptionId) {
-      console.log(this.loadingButtonIndex)
       if (this.loadingButtonIndex != -2) {
         return
       } // Ask why if I compare this.loadingButtonIndex to NOT_BUTTONS_LOADING from Feeds is false even though both are -2
@@ -58,9 +56,7 @@ export default {
         if (this.loadingButtonIndex != -2) {
           return
         }
-        this.$emit("SETBURRON LOADING ", PONER EL BOTON EN LOADING )
         this.$emit("removeFeed", this.feed, this.index)
-        this.$emit("SETBURRON LOADING ", DEJAR D PONER EL BOTON EN LOADING )
       }
     },
   }
