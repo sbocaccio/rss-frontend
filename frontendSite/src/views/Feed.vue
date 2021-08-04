@@ -23,7 +23,7 @@
         Read
       </v-btn>
       <ConfirmDialog openDialoge="delete" title="Delete subscription" message="Are you sure that you want to delete it?"
-                     cancelButton="cancel" okButton="delete" @action="action"></ConfirmDialog>
+                     cancelButton="cancel" okButton="delete" @confirmed="removeFeed"></ConfirmDialog>
     </v-list-item>
 
 
@@ -35,28 +35,23 @@
 
 
 import ConfirmDialog from "../shared_components/ConfirmDialog";
+
 export default {
   components: {ConfirmDialog},
-  props: ['feed', 'index', 'loadingButtonIndex'],
+  props: ['feed', 'loading'],
   methods: {
     async goToArticles(subscriptionId) {
-      if (this.loadingButtonIndex != -2) {
+      if (this.loading) {
         return
-      } // Ask why if I compare this.loadingButtonIndex to NOT_BUTTONS_LOADING from Feeds is false even though both are -2
+      }
       this.$router.push({name: 'articles', params: {subscriptionId: subscriptionId}});
-
-
     },
-    async removeFeed(subscription, index) {
-
-      this.$emit("removeFeed", subscription, index)
-    },
-    action(delete_or_cancel) {
-      if (delete_or_cancel) {
-        if (this.loadingButtonIndex != -2) {
+    removeFeed(confirmButtonPressed) {
+      if (confirmButtonPressed) {
+        if (this.loading) {
           return
         }
-        this.$emit("removeFeed", this.feed, this.index)
+        this.$emit("removeFeed", this.feed)
       }
     },
   }

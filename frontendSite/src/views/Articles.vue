@@ -52,7 +52,6 @@ export default {
         this.responseMessage = error.response.data.detail
       }
       this.loading = false
-
     },
   },
   async mounted() {

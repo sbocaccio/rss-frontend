@@ -54,13 +54,13 @@ export default {
   methods:{
     _confirm() {
       this.dialog= false
-      this.$emit("action", true)
+      this.$emit("confirmed", true)
 
     },
 
     _cancel() {
       this.dialog= false
-      this.$emit("action", false)
+      this.$emit("confirmed", false)
 
     },
   }

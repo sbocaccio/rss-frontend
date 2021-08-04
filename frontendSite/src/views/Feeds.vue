@@ -20,7 +20,7 @@
             <v-btn
                 class="mr-4"
                 @click="submitFeed"
-                :loading="loadingButtonIndex== -1 "
+                :loading="loading"
                 :disabled="!isFormValid"
 
             >
@@ -48,8 +48,8 @@
         <v-list three-line align="left"
 
         >
-          <template v-for="(feed,index) in feeds">
-            <Feed :feed="feed" :index="index" :loadingButtonIndex="loadingButtonIndex" :key="feed.id"
+          <template v-for="feed in feeds">
+            <Feed :feed="feed" :loading="loading" :key="feed.id"
                   @removeFeed="removeFeed">
 
             </Feed>
@@ -70,10 +70,6 @@
 import Feed from './Feed.vue';
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
 import {mapGetters} from 'vuex'
-import ConfirmDialog from "../shared_components/ConfirmDialog";
-
-const NOT_BUTTONS_LOADING = -2;
-const SUBMIT_BUTTON_INDEX = -1;
 
 export default {
   components: {Feed},
@@ -85,10 +81,9 @@ export default {
       url: '',
       errorMsg: '',
       isFormValid: false,
-      successMsg: '',
       typeMessage: '',
       responseMessage: '',
-      loadingButtonIndex: '-2',
+      loading: false,
 
     };
   },
@@ -98,10 +93,10 @@ export default {
       this.typeMessage = 'error'
     },
     async submitFeed() {
-      if (!this.loadingButtonIndex == NOT_BUTTONS_LOADING) {
+      if (this.loading) {
         return
       }
-      this.loadingButtonIndex = SUBMIT_BUTTON_INDEX
+      this.loading = true
       var response;
       try {
         const credentials = {
@@ -122,11 +117,11 @@ export default {
         }
         this.handleError(message);
       }
-      this.loadingButtonIndex = NOT_BUTTONS_LOADING
+      this.loading = false
 
     },
-    async removeFeed(subscription, index) {
-      this.loadingButtonIndex = index
+    async removeFeed(subscription) {
+      this.loading = true
       try {
         var service = new SubscriptionFeed()
         await (service.removeFeed(subscription.id));
@@ -135,8 +130,8 @@ export default {
         var message = error.response.data.message
         this.handleError(message);
       }
+      this.loading = false
 
-      this.loadingButtonIndex = NOT_BUTTONS_LOADING
 
     },
     async getFeeds() {
