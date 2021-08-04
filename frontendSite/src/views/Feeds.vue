@@ -126,6 +126,8 @@ export default {
         var service = new SubscriptionFeed()
         await (service.removeFeed(subscription.id));
         this.$store.commit('removeFeed', subscription)
+        this.typeMessage = 'success'
+        this.responseMessage = 'Subscription was deleted successfully'
       } catch (error) {
         var message = error.response.data.message
         this.handleError(message);
