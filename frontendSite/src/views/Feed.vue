@@ -58,6 +58,7 @@ export default {
         return
       }
       this.$emit("removeFeed", this.feed)
+
     },
     async refreshArticles(subscription) {
       if (this.loading) {
@@ -65,7 +66,7 @@ export default {
       }
         var service = new SubscriptionFeed()
         var updated_articles = await service.refreshFeed(subscription.id);
-        console.log(updated_articles.data)
+        console.log(updated_articles)
 
     }
   }
