@@ -80,7 +80,7 @@ export default {
         this.$store.commit('removeFeed', this.feed)
         this.$emit("resultMessage",'success', 'Subscription was deleted successfully')
       } catch (error) {
-        this.$emit("resultMessage", 'error', error.response.data.message)
+        this.$emit("resultMessage", 'error', error.response.data.detail)
       }
       this.loading = false
     },
@@ -99,7 +99,7 @@ export default {
         this.$emit("resultMessage",'success', 'Subscription was refresh successfully')
 
       } catch (error) {
-        this.$emit("resultMessage",'success', 'Subscription was refresh successfully')
+        this.$emit("resultMessage",'success', error.response.data.detail)
       }
       this.loading = false
     }
