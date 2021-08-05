@@ -20,7 +20,7 @@
             <v-btn
                 class="mr-4"
                 @click="submitFeed"
-                :loading="loading"
+                :loading="submitLoading"
                 :disabled="!isFormValid"
 
             >
@@ -49,8 +49,12 @@
 
         >
           <template v-for="feed in feeds">
-            <Feed :feed="feed" :anyFeedLoading="loading" :key="feed.id"
-                  @removeFeed="removeFeed">
+            <Feed :feed="feed" :anyFeedLoading="anyFeedLoading" :key="feed.id"
+                  @removeFeed="removeFeed"
+                  @lockFeedsActions="lockFeeds"
+                  @freeFeedsActions="freeFeeds"
+                  @displayOnScreen="showMessageInScreen"
+            >
 
             </Feed>
 
@@ -83,20 +87,28 @@ export default {
       isFormValid: false,
       typeMessage: '',
       responseMessage: '',
-      loading: false,
+      anyFeedLoading: false,
+      submitLoading:false,
 
     };
   },
   methods: {
-    handleError(error) {
-      this.responseMessage = error
-      this.typeMessage = 'error'
+    lockFeeds(){
+      this.anyFeedLoading= true
+    },
+    freeFeeds(){
+      this.anyFeedLoading= false
+    },
+
+    handleError(errorMessage) {
+      this.showMessageInScreen('error', errorMessage)
     },
     async submitFeed() {
-      if (this.loading) {
+      if (this.submitLoading) {
         return
       }
-      this.loading = true
+      this.lockFeeds()
+      this.submitLoading= true
       var response;
       try {
         const credentials = {
@@ -105,8 +117,7 @@ export default {
         var service = new SubscriptionFeed()
         response = await (service.addFeed(credentials));
         this.$store.commit('addFeed', response.data)
-        this.typeMessage = 'success'
-        this.responseMessage = 'Subscription was created successfully'
+        this.showMessageInScreen('success', 'Subscription was created successfully')
         this.url = ' '
       } catch (error) {
         var message = ''
@@ -117,22 +128,24 @@ export default {
         }
         this.handleError(message);
       }
-      this.loading = false
-
+      this.submitLoading = false
+      this.freeFeeds()
+    },
+    showMessageInScreen(typeMessage, message) {
+      this.typeMessage = typeMessage
+      this.responseMessage = message
     },
     async removeFeed(subscription) {
-      this.loading = true
+      this.anyFeedLoading = true
       try {
         var service = new SubscriptionFeed()
         await (service.removeFeed(subscription.id));
         this.$store.commit('removeFeed', subscription)
-        this.typeMessage = 'success'
-        this.responseMessage = 'Subscription was deleted successfully'
+        this.showMessageInScreen('success', 'Subscription was deleted successfully')
       } catch (error) {
-        var message = error.response.data.message
-        this.handleError(message);
+        this.handleError(error.response.data.message);
       }
-      this.loading = false
+      this.anyFeedLoading = false
     },
     async getFeeds() {
       try {
@@ -145,7 +158,6 @@ export default {
     },
 
   },
-
   computed: {
     ...mapGetters([
       'feeds',
@@ -154,8 +166,6 @@ export default {
   async mounted() {
     await this.getFeeds()
   },
-
-
 };
 </script>
 

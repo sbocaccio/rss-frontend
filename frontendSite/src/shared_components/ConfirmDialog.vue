@@ -9,6 +9,7 @@
             color="primary"
             v-bind="attrs"
             v-on="on"
+            :loading="loading"
         >
           {{openDialoge}}
         </v-btn>
@@ -44,7 +45,7 @@
 
 <script>
 export default {
-  props: ['openDialoge','title', 'message', 'cancelButton','okButton'],
+  props: ['openDialoge','title', 'message', 'cancelButton','okButton','loading'],
   data() {
     return {
       dialog: false,
