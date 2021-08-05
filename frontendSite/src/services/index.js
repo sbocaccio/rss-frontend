@@ -20,10 +20,9 @@ async function retryRequestRefreshingAccessToken(request) {
         await refreshAccessToken();
         var new_token = window.localStorage.getItem('access_token')
         request.headers.Authorization = 'Bearer ' + new_token
-        store.commit.isAuthenticated(true)
         return axiosApiInstance(request);
     } catch (refresh_error) {
-        store.commit.isAuthenticated(false)
+        store.commit('setAuthentication', false)
         return Promise.reject(refresh_error)
     }
 }

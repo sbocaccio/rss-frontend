@@ -1,6 +1,6 @@
 import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
-import Feed from "./views/Feed.vue";
+import Feed from "./views/Feeds.vue";
 import Articles from "./views/Articles.vue";
 
 import Vue from "vue";
