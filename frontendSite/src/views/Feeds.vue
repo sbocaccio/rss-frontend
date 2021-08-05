@@ -49,7 +49,7 @@
 
         >
           <template v-for="feed in feeds">
-            <Feed :feed="feed" :loading="loading" :key="feed.id"
+            <Feed :feed="feed" :anyFeedLoading="loading" :key="feed.id"
                   @removeFeed="removeFeed">
 
             </Feed>
