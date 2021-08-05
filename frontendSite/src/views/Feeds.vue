@@ -49,12 +49,10 @@
 
         >
           <template v-for="feed in feeds">
-            <Feed :feed="feed" :anyFeedLoading="anyFeedLoading" :key="feed.id"
-                  @lockFeedsActions="lockFeeds"
-                  @freeFeedsActions="freeFeeds"
-                  @displayOnScreen="showMessageOnScreen"
+            <Feed :feed="feed" :canLoad="feedsCanLoad" :key="feed.id"
+                  @startedLoading="feedStartedLoading"
+                  @resultMessage="feedFinishedLoading"
             >
-
             </Feed>
 
           </template>
@@ -86,19 +84,19 @@ export default {
       isFormValid: false,
       typeMessage: '',
       responseMessage: '',
-      anyFeedLoading: false,
-      submitLoading:false,
+      feedsCanLoad: true,
+      submitLoading: false,
 
     };
   },
   methods: {
-    lockFeeds(){
-      this.anyFeedLoading= true
+    feedStartedLoading() {
+      this.feedsCanLoad = false
     },
-    freeFeeds(){
-      this.anyFeedLoading= false
+    feedFinishedLoading(resultType, message) {
+      this.showMessageOnScreen(resultType, message)
+      this.feedsCanLoad = true
     },
-
     handleError(errorMessage) {
       this.showMessageOnScreen('error', errorMessage)
     },
@@ -106,8 +104,8 @@ export default {
       if (this.submitLoading) {
         return
       }
-      this.lockFeeds()
-      this.submitLoading= true
+      this.feedsCanLoad = false
+      this.submitLoading = true
       var response;
       try {
         const credentials = {
@@ -128,7 +126,7 @@ export default {
         this.handleError(message);
       }
       this.submitLoading = false
-      this.freeFeeds()
+      this.feedsCanLoad = true
     },
     showMessageOnScreen(typeMessage, message) {
       this.typeMessage = typeMessage
@@ -143,7 +141,6 @@ export default {
         this.handleError(error.response.data.message);
       }
     },
-
   },
   computed: {
     ...mapGetters([
@@ -155,7 +152,6 @@ export default {
   },
 };
 </script>
-
 
 <style>
 .action {

@@ -23,14 +23,14 @@
       </v-btn>
       <v-btn
           class="mr-4"
-          :loading="refreshLoading"
+          :loading="loading"
           @click="refreshArticles()"
 
       >
         Refresh
       </v-btn>
       <ConfirmDialog openDialoge="delete" title="Delete subscription" message="Are you sure that you want to delete it?"
-                     cancelButton="cancel" okButton="delete" @confirmed="removeFeed" @loading="deleteLoading"
+                     cancelButton="cancel" okButton="delete" @confirmed="removeFeed"
       ></ConfirmDialog>
 
     </v-list-item>
@@ -38,7 +38,7 @@
     <v-alert
         dense
         type="info"
-        v-if="displayNumberOfNewArticles"
+        v-if="new_articles >= 0"
     >
       There are {{ new_articles }} new articles
     </v-alert>
@@ -54,59 +54,54 @@ import SubscriptionFeed from "../services/SubscriptionFeedService";
 
 export default {
   components: {ConfirmDialog},
-  props: ['feed', 'anyFeedLoading'],
+  props: ['feed', 'canLoad'],
   data() {
     return {
-      refreshLoading: false,
-      deleteLoading: false,
-      new_articles: 0,
-      displayNumberOfNewArticles: false,
+      loading: false,
+      new_articles: -1,
     };
   },
   methods: {
     async goToArticles() {
-      if (this.anyFeedLoading) {
+      if (!this.canLoad) {
         return
       }
       this.$router.push({name: 'articles', params: {subscriptionId: this.feed.id}});
     },
     async removeFeed() {
-      if (this.anyFeedLoading) {
+      if (!this.canLoad) {
         return
       }
-      this.$emit("lockFeedsActions")
-      this.deleteLoading = true
+      this.loading = true
+      this.$emit("startedLoading")
       try {
         var service = new SubscriptionFeed()
         await (service.removeFeed(this.feed.id));
         this.$store.commit('removeFeed', this.feed)
-        this.$emit("displayOnScreen", 'success', 'Subscription was deleted successfully')
+        this.$emit("resultMessage",'success', 'Subscription was deleted successfully')
       } catch (error) {
-        this.$emit("displayOnScreen", 'error', error.response.data.message)
+        this.$emit("resultMessage", 'error', error.response.data.message)
       }
-      this.$emit("freeFeedsActions")
-      this.deleteLoading = false
-
+      this.loading = false
     },
 
     async refreshArticles() {
-      if (this.anyFeedLoading) {
+      if (!this.canLoad) {
         return
       }
-      this.$emit("lockFeedsActions")
-      this.refreshLoading = true
+      this.$emit("startedLoading")
+      this.loading = true
       try {
         var service = new SubscriptionFeed()
         var response = await service.refreshFeed(this.feed.id);
         this.$store.commit('setArticles', response.data.user_articles)
-        this.displayNumberOfNewArticles = true
         this.new_articles = response.data.number_of_new_articles
+        this.$emit("resultMessage",'success', 'Subscription was refresh successfully')
+
       } catch (error) {
-        this.$emit("displayOnScreen", 'error', error.response.data.message)
+        this.$emit("resultMessage",'success', 'Subscription was refresh successfully')
       }
-      this.$emit("freeFeedsActions")
-      this.refreshLoading = false
-      this.refreshLoading = false
+      this.loading = false
     }
   }
 }
