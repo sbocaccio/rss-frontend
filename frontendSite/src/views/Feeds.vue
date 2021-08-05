@@ -50,7 +50,6 @@
         >
           <template v-for="feed in feeds">
             <Feed :feed="feed" :anyFeedLoading="anyFeedLoading" :key="feed.id"
-                  @removeFeed="removeFeed"
                   @lockFeedsActions="lockFeeds"
                   @freeFeedsActions="freeFeeds"
                   @displayOnScreen="showMessageInScreen"
