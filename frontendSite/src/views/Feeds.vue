@@ -52,7 +52,7 @@
             <Feed :feed="feed" :anyFeedLoading="anyFeedLoading" :key="feed.id"
                   @lockFeedsActions="lockFeeds"
                   @freeFeedsActions="freeFeeds"
-                  @displayOnScreen="showMessageInScreen"
+                  @displayOnScreen="showMessageOnScreen"
             >
 
             </Feed>
@@ -100,7 +100,7 @@ export default {
     },
 
     handleError(errorMessage) {
-      this.showMessageInScreen('error', errorMessage)
+      this.showMessageOnScreen('error', errorMessage)
     },
     async submitFeed() {
       if (this.submitLoading) {
@@ -116,7 +116,7 @@ export default {
         var service = new SubscriptionFeed()
         response = await (service.addFeed(credentials));
         this.$store.commit('addFeed', response.data)
-        this.showMessageInScreen('success', 'Subscription was created successfully')
+        this.showMessageOnScreen('success', 'Subscription was created successfully')
         this.url = ' '
       } catch (error) {
         var message = ''
@@ -130,7 +130,7 @@ export default {
       this.submitLoading = false
       this.freeFeeds()
     },
-    showMessageInScreen(typeMessage, message) {
+    showMessageOnScreen(typeMessage, message) {
       this.typeMessage = typeMessage
       this.responseMessage = message
     },
