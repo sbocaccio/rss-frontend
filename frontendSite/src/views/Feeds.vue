@@ -135,18 +135,6 @@ export default {
       this.typeMessage = typeMessage
       this.responseMessage = message
     },
-    async removeFeed(subscription) {
-      this.anyFeedLoading = true
-      try {
-        var service = new SubscriptionFeed()
-        await (service.removeFeed(subscription.id));
-        this.$store.commit('removeFeed', subscription)
-        this.showMessageInScreen('success', 'Subscription was deleted successfully')
-      } catch (error) {
-        this.handleError(error.response.data.message);
-      }
-      this.anyFeedLoading = false
-    },
     async getFeeds() {
       try {
         var service = new SubscriptionFeed();

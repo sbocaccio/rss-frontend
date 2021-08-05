@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-list-item
-        color=red
         :key="feed.title"
     >
       <v-list-item-avatar>
@@ -106,6 +105,7 @@ export default {
         this.$emit("displayOnScreen", 'error', error.response.data.message)
       }
       this.$emit("freeFeedsActions")
+      this.refreshLoading = false
       this.refreshLoading = false
     }
   }
