@@ -28,6 +28,10 @@ const store = new Vuex.Store({
             state.username = username
 
         },
+        removeFeed(state,feed){
+            var elementsIndex =  state.feeds.indexOf(feed)
+            state.feeds.splice(elementsIndex,1)
+        },
     },
     getters: {
         feeds: state => {

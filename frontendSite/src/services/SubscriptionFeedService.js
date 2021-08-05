@@ -37,5 +37,15 @@ export default class SubscriptionFeed {
         return (resp.data);
 
     }
+    async removeFeed(subscription_id){
+        var authService = new AuthService()
+        var config = authService.headerWithToken()
+        var response = await axiosApiInstance
+            .delete(`${url}subscriptions/${subscription_id}/`,config
+
+            )
+        return response
+
+    }
 
 }

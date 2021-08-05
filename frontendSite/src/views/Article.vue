@@ -16,7 +16,7 @@ a {
                   @click="goToPage()"
                   to="userArticle.article.title"
     >
-      <a class="section-link active" data-scroll="" href="userArticle.article.link">    {{ userArticle.article.title }}</a>
+      <a class="section-link active" data-scroll="" :href=userArticle.article.link target="_blank">{{ userArticle.article.title }}</a>
 
     </v-card-title>
 
