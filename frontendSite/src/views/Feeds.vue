@@ -121,7 +121,7 @@ export default {
         if (error.response.status == 400) {
           message = ('Imposible to parse url')
         } else {
-          message = error.response.data.message
+          message = error.response.data.detail
         }
         this.handleError(message);
       }

@@ -18,12 +18,14 @@
       <v-btn
           class="mr-4"
           @click="goToArticles()"
+          :disabled="!canLoad"
       >
         Read
       </v-btn>
       <v-btn
           class="mr-4"
           :loading="loading"
+          :disabled="!canLoad"
           @click="refreshArticles()"
 
       >
@@ -99,7 +101,7 @@ export default {
         this.$emit("resultMessage",'success', 'Subscription was refresh successfully')
 
       } catch (error) {
-        this.$emit("resultMessage",'success', error.response.data.detail)
+        this.$emit("resultMessage",'error', error.response.data.detail)
       }
       this.loading = false
     }
