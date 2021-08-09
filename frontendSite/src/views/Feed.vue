@@ -80,9 +80,9 @@ export default {
         var service = new SubscriptionFeed()
         await (service.removeFeed(this.feed.id));
         this.$store.commit('removeFeed', this.feed)
-        this.$emit("resultMessage",'success', 'Subscription was deleted successfully')
+        this.$emit("finishedLoading",'success', 'Subscription was deleted successfully')
       } catch (error) {
-        this.$emit("resultMessage", 'error', error.response.data.detail)
+        this.$emit("finishedLoading", 'error', error.response.data.detail)
       }
       this.loading = false
     },
