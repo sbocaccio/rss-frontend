@@ -98,10 +98,10 @@ export default {
         var response = await service.refreshFeed(this.feed.id);
         this.$store.commit('setArticles', response.data.user_articles)
         this.new_articles = response.data.number_of_new_articles
-        this.$emit("resultMessage",'success', 'Subscription was refresh successfully')
+        this.$emit("finishedLoading",'success', 'Subscription was refresh successfully')
 
       } catch (error) {
-        this.$emit("resultMessage",'error', error.response.data.detail)
+        this.$emit("finishedLoading",'error', error.response.data.detail)
       }
       this.loading = false
     }

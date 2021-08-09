@@ -51,7 +51,7 @@
           <template v-for="feed in feeds">
             <Feed :feed="feed" :canLoad="feedsCanLoad" :key="feed.id"
                   @startedLoading="feedStartedLoading"
-                  @resultMessage="feedFinishedLoading"
+                  @finishedLoading="feedFinishedLoading"
             >
             </Feed>
 
