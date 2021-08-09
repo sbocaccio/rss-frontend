@@ -22,7 +22,7 @@ async function retryRequestRefreshingAccessToken(request) {
         request.headers.Authorization = 'Bearer ' + new_token
         return axiosApiInstance(request);
     } catch (refresh_error) {
-        store.commit('setAuthentication', false)
+        store.commit('setAuthentication',false)
         return Promise.reject(refresh_error)
     }
 }
@@ -30,7 +30,6 @@ async function retryRequestRefreshingAccessToken(request) {
 // Response interceptor for API calls
 axiosApiInstance.interceptors.response.use((response) => {
     return response
-
 }, async function (error) {
     var originalRequest = error.config;
     if ((error.response.status === 403 || error.response.status === 401) && !originalRequest._retry) {

@@ -20,7 +20,7 @@
             <v-btn
                 class="mr-4"
                 @click="submitFeed"
-                :loading="loading"
+                :loading="submitLoading"
                 :disabled="!isFormValid"
 
             >
@@ -49,9 +49,10 @@
 
         >
           <template v-for="feed in feeds">
-            <Feed :feed="feed" :loading="loading" :key="feed.id"
-                  @removeFeed="removeFeed">
-
+            <Feed :feed="feed" :canLoad="feedsCanLoad" :key="feed.id"
+                  @startedLoading="feedStartedLoading"
+                  @finishedLoading="feedFinishedLoading"
+            >
             </Feed>
 
           </template>
@@ -83,20 +84,28 @@ export default {
       isFormValid: false,
       typeMessage: '',
       responseMessage: '',
-      loading: false,
+      feedsCanLoad: true,
+      submitLoading: false,
 
     };
   },
   methods: {
-    handleError(error) {
-      this.responseMessage = error
-      this.typeMessage = 'error'
+    feedStartedLoading() {
+      this.feedsCanLoad = false
+    },
+    feedFinishedLoading(resultType, message) {
+      this.showMessageOnScreen(resultType, message)
+      this.feedsCanLoad = true
+    },
+    handleError(errorMessage) {
+      this.showMessageOnScreen('error', errorMessage)
     },
     async submitFeed() {
-      if (this.loading) {
+      if (this.submitLoading) {
         return
       }
-      this.loading = true
+      this.feedsCanLoad = false
+      this.submitLoading = true
       var response;
       try {
         const credentials = {
@@ -105,36 +114,23 @@ export default {
         var service = new SubscriptionFeed()
         response = await (service.addFeed(credentials));
         this.$store.commit('addFeed', response.data)
-        this.typeMessage = 'success'
-        this.responseMessage = 'Subscription was created successfully'
+        this.showMessageOnScreen('success', 'Subscription was created successfully')
         this.url = ' '
       } catch (error) {
         var message = ''
         if (error.response.status == 400) {
           message = ('Imposible to parse url')
         } else {
-          message = error.response.data.message
+          message = error.response.data.detail
         }
         this.handleError(message);
       }
-      this.loading = false
-
+      this.submitLoading = false
+      this.feedsCanLoad = true
     },
-    async removeFeed(subscription) {
-      this.loading = true
-      try {
-        var service = new SubscriptionFeed()
-        await (service.removeFeed(subscription.id));
-        this.$store.commit('removeFeed', subscription)
-        this.typeMessage = 'success'
-        this.responseMessage = 'Subscription was deleted successfully'
-      } catch (error) {
-        var message = error.response.data.message
-        this.handleError(message);
-      }
-      this.loading = false
-
-
+    showMessageOnScreen(typeMessage, message) {
+      this.typeMessage = typeMessage
+      this.responseMessage = message
     },
     async getFeeds() {
       try {
@@ -145,9 +141,7 @@ export default {
         this.handleError(error.response.data.message);
       }
     },
-
   },
-
   computed: {
     ...mapGetters([
       'feeds',
@@ -156,11 +150,8 @@ export default {
   async mounted() {
     await this.getFeeds()
   },
-
-
 };
 </script>
-
 
 <style>
 .action {

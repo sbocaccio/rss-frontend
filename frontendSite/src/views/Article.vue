@@ -10,7 +10,6 @@ a {
 
 <template>
   <v-card
-
   >
     <v-card-title v-if="userArticle.article.title"
                   @click="goToPage()"
@@ -22,7 +21,6 @@ a {
 
     <v-card-text>{{ userArticle.article.summary }}</v-card-text>
     <v-card-actions>
-
       <v-img
           v-if="userArticle.article.image"
           :src="userArticle.article.image"
@@ -42,6 +40,6 @@ export default {
     goToPage(link) {
       window.open(link, "_blank");
     },
-  }
+  },
 }
 </script>
