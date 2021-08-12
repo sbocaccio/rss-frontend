@@ -56,7 +56,12 @@ export default class SubscriptionFeed {
         return response
 
     }
-
-
-
+    async updateReadState(user_article_pk,read){
+        var authService = new AuthService()
+        var config = authService.headerWithToken()
+        var readState= {'read': read}
+        var response = await axiosApiInstance
+            .put(`${url}articles/${user_article_pk}/`,readState,config)
+        return response
+    }
 }
