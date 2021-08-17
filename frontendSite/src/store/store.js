@@ -8,7 +8,8 @@ const store = new Vuex.Store({
         feeds: [],
         articles: [],
         isAuthenticated: false,
-        username: ''
+        username: '',
+        folders:[],
     },
     mutations: {
         addFeed(state, feed) {
@@ -16,6 +17,9 @@ const store = new Vuex.Store({
         },
         setFeeds(state, feeds) {
             state.feeds = feeds
+        },
+        setFolders(state, folders) {
+            state.folders = folders
         },
         setArticles(state, articles) {
             state.articles = articles
@@ -45,7 +49,11 @@ const store = new Vuex.Store({
         } ,
         username: state => {
             return state.username
+        },
+        folders: state =>{
+            return state.folders
         }
+
     }
 })
 export default store;

@@ -1,4 +1,9 @@
-<script></script>
+<script>
+import Folders from "./Folders";
+export default {
+  components: {Folders}
+}
+</script>
 <template>
 
   <div id="app">
@@ -54,13 +59,17 @@
                   @finishedLoading="feedFinishedLoading"
             >
             </Feed>
-
           </template>
+          <Folders :selectedSubscriptions="selectedSubscriptions">
 
-
+          </Folders>
         </v-list>
 
+
+
       </v-card>
+
+
     </v-app>
   </div>
 
@@ -71,9 +80,9 @@
 import Feed from './Feed.vue';
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
 import {mapGetters} from 'vuex'
-
+import Folders from "./Folders";
 export default {
-  components: {Feed},
+  components: {Feed,Folders},
   data() {
     return {
       rules: {
@@ -86,6 +95,8 @@ export default {
       responseMessage: '',
       feedsCanLoad: true,
       submitLoading: false,
+      selectedSubscriptions: [],
+
 
     };
   },

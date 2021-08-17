@@ -1,8 +1,12 @@
 <template>
   <div>
+
     <v-list-item
         :key="feed.title"
     >
+      <v-checkbox
+          v-model="checkbox"
+      ></v-checkbox>
       <v-list-item-avatar>
         <v-img
             v-if="feed.image"
@@ -61,6 +65,7 @@ export default {
     return {
       loading: false,
       new_articles: -1,
+      checkbox: false,
     };
   },
   methods: {

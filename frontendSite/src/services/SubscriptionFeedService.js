@@ -26,6 +26,16 @@ export default class SubscriptionFeed {
         return (resp.data);
     }
 
+    async getFolders() {
+        var authService = new AuthService()
+        var config = authService.headerWithToken()
+        var resp = await axiosApiInstance
+            .get(url + 'folder',
+                config
+            )
+        return (resp.data);
+    }
+
     async getArticles(subscription_id) {
 
         var authService = new AuthService()
@@ -34,6 +44,7 @@ export default class SubscriptionFeed {
         var resp = await axiosApiInstance
             .get(page_url, config
             )
+        console.log(resp)
         return (resp.data);
 
     }
