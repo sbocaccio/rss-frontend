@@ -20,7 +20,7 @@ export default class Folders {
             .post(url + 'folder',name,
                 config
             )
-        return resp;
+        return resp.data;
     }
     async addSubscriptionToFolder(subscription,folderPK){
         var authService = new AuthService()

@@ -105,7 +105,6 @@ export default {
   },
   methods: {
     setSelectedSubscriptions(feed, isSelected) {
-      // Cambiar a operador que solo ocupa una linea plis
       if (isSelected) {
         this.selectedSubscriptions.push(feed)
       } else {

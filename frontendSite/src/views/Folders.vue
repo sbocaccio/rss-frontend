@@ -7,13 +7,6 @@
   >
     Add to folder
     <v-card-text>
-      <v-alert
-          dense
-          outlined
-          type="error"
-      >
-        Falle
-      </v-alert>
       <v-autocomplete
           :items="folders"
           color="white"
@@ -65,17 +58,20 @@ export default {
       var service = new Folders();
       if (this.newFolder) {
         var name = {'name': this.newFolder}
-        folderToBeAdded = await (service.createFolder(name));
+        var folder = await (service.createFolder(name));
+        this.$store.commit('addFolder', folder)
+        folderToBeAdded = folder
       } else {
         folderToBeAdded = this.$store.getters.folderWithName(this.existingFolder)
       }
       for (let element in this.selectedSubscriptions) {
-        var data = {'subscription_id':this.selectedSubscriptions[element].id.toString()}
-        var resp = await service.addSubscriptionToFolder(data,folderToBeAdded.pk)
-        console.log(resp)
+        var data = {'subscription_id': this.selectedSubscriptions[element].id.toString()}
+        await service.addSubscriptionToFolder(data, folderToBeAdded.pk)
+
+        this.$store.commit('addFolderToFeed', [this.selectedSubscriptions[element], folderToBeAdded])
+
+
       }
-
-
     }
   },
   async mounted() {

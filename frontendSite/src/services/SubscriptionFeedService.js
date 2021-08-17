@@ -44,7 +44,6 @@ export default class SubscriptionFeed {
         var resp = await axiosApiInstance
             .get(page_url, config
             )
-        console.log(resp)
         return (resp.data);
 
     }

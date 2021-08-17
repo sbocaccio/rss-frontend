@@ -15,6 +15,9 @@ const store = new Vuex.Store({
         addFeed(state, feed) {
             state.feeds.push(feed);
         },
+        addFolder(state, folder) {
+            state.folders.push(folder);
+        },
         setFeeds(state, feeds) {
             state.feeds = feeds
         },
@@ -36,6 +39,15 @@ const store = new Vuex.Store({
             var elementsIndex =  state.feeds.indexOf(feed)
             state.feeds.splice(elementsIndex,1)
         },
+        addFolderToFeed(state,data) {
+            var feed = data[0]
+            var folder = data[1]
+            var feedIndex = state.feeds.indexOf(feed)
+            var folderIndex = (state.feeds[feedIndex]).folders.indexOf(folder)
+            if (folderIndex == -1) {
+                state.feeds[feedIndex].folders.push(folder.name)
+            }
+        }
     },
     getters: {
         feeds: state => {
