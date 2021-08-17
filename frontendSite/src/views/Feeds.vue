@@ -1,5 +1,6 @@
 <script>
 import Folders from "./Folders";
+
 export default {
   components: {Folders}
 }
@@ -57,14 +58,15 @@ export default {
             <Feed :feed="feed" :canLoad="feedsCanLoad" :key="feed.id"
                   @startedLoading="feedStartedLoading"
                   @finishedLoading="feedFinishedLoading"
+                  @selectSubscription="setSelectedSubscriptions"
             >
             </Feed>
           </template>
-          <Folders :selectedSubscriptions="selectedSubscriptions">
+          <Folders :selectedSubscriptions="selectedSubscriptions"
+          >
 
           </Folders>
         </v-list>
-
 
 
       </v-card>
@@ -81,8 +83,9 @@ import Feed from './Feed.vue';
 import SubscriptionFeed from '@/services/SubscriptionFeedService.js';
 import {mapGetters} from 'vuex'
 import Folders from "./Folders";
+
 export default {
-  components: {Feed,Folders},
+  components: {Feed, Folders},
   data() {
     return {
       rules: {
@@ -101,6 +104,14 @@ export default {
     };
   },
   methods: {
+    setSelectedSubscriptions(feed, isSelected) {
+      // Cambiar a operador que solo ocupa una linea plis
+      if (isSelected) {
+        this.selectedSubscriptions.push(feed)
+      } else {
+        this.selectedSubscriptions.splice(this.selectedSubscriptions.indexOf(feed), 1);
+      }
+    },
     feedStartedLoading() {
       this.feedsCanLoad = false
     },
@@ -147,12 +158,14 @@ export default {
       try {
         var service = new SubscriptionFeed();
         var feeds = await (service.getFeeds());
+
         this.$store.commit('setFeeds', feeds)
       } catch (error) {
         this.handleError(error.response.data.message);
       }
     },
   },
+
   computed: {
     ...mapGetters([
       'feeds',
@@ -160,6 +173,7 @@ export default {
   },
   async mounted() {
     await this.getFeeds()
+
   },
 };
 </script>

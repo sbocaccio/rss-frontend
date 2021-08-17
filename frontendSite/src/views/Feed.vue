@@ -1,12 +1,16 @@
 <template>
   <div>
 
+
     <v-list-item
         :key="feed.title"
     >
+
       <v-checkbox
-          v-model="checkbox"
-      ></v-checkbox>
+          v-model="selected"
+          @change="selectSubscription">
+        >
+      </v-checkbox>
       <v-list-item-avatar>
         <v-img
             v-if="feed.image"
@@ -40,7 +44,14 @@
       ></ConfirmDialog>
 
     </v-list-item>
-
+    <template v-for="folder in feed.folders">
+      <v-chip
+          class="ma-2"
+          :key="folder.pk"
+      >
+        {{ folder }}
+      </v-chip>
+    </template>
     <v-alert
         dense
         type="info"
@@ -65,7 +76,7 @@ export default {
     return {
       loading: false,
       new_articles: -1,
-      checkbox: false,
+      selected: false,
     };
   },
   methods: {
@@ -85,7 +96,7 @@ export default {
         var service = new SubscriptionFeed()
         await (service.removeFeed(this.feed.id));
         this.$store.commit('removeFeed', this.feed)
-        this.$emit("finishedLoading",'success', 'Subscription was deleted successfully')
+        this.$emit("finishedLoading", 'success', 'Subscription was deleted successfully')
       } catch (error) {
         this.$emit("finishedLoading", 'error', error.response.data.detail)
       }
@@ -103,12 +114,15 @@ export default {
         var response = await service.refreshFeed(this.feed.id);
         this.$store.commit('setArticles', response.data.user_articles)
         this.new_articles = response.data.number_of_new_articles
-        this.$emit("finishedLoading",'success', 'Subscription was refresh successfully')
+        this.$emit("finishedLoading", 'success', 'Subscription was refresh successfully')
 
       } catch (error) {
-        this.$emit("finishedLoading",'error', error.response.data.detail)
+        this.$emit("finishedLoading", 'error', error.response.data.detail)
       }
       this.loading = false
+    },
+    selectSubscription() {
+      this.$emit("selectSubscription", this.feed, this.selected)
     }
   }
 }

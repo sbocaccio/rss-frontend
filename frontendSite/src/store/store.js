@@ -52,7 +52,10 @@ const store = new Vuex.Store({
         },
         folders: state =>{
             return state.folders
-        }
+        },
+        folderWithName: (state) => (name) => {
+            return state.folders.find(folder => folder.name === name )
+        },
 
     }
 })
