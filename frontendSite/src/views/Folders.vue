@@ -7,6 +7,15 @@
   >
     Add to folder
     <v-card-text>
+
+      <v-alert
+          v-if="responseMessage"
+          dense
+          text
+          :type="responseType"
+      >
+        {{ responseMessage }}
+      </v-alert>
       <v-autocomplete
           :items="folders"
           color="white"
@@ -41,6 +50,8 @@ export default {
     return {
       newFolder: '',
       existingFolder: '',
+      responseMessage: '',
+      responseType: '',
     }
   },
   methods: {
@@ -50,28 +61,66 @@ export default {
         var folders = await (service.getFolders());
         this.$store.commit('setFolders', folders)
       } catch (error) {
-        console.log(error)
+        this.handleError(error.detail)
       }
     },
-    async addSubscriptionsToFolder() {
-      var folderToBeAdded = null;
-      var service = new Folders();
+    createFolder: async function (service) {
+      var name = {'name': this.newFolder}
+      var folder = await (service.createFolder(name));
+      this.$store.commit('addFolder', folder)
+      return folder
+    }, addSubscriptionToFolder: async function (element, service, folderToBeAdded) {
+      var data = {'subscription_id': this.selectedSubscriptions[element].id.toString()}
+      await service.addSubscriptionToFolder(data, folderToBeAdded.pk)
+      this.$store.commit('addFolderToFeed', [this.selectedSubscriptions[element], folderToBeAdded])
+
+    }, getFolder: async function (service) {
       if (this.newFolder) {
-        var name = {'name': this.newFolder}
-        var folder = await (service.createFolder(name));
-        this.$store.commit('addFolder', folder)
-        folderToBeAdded = folder
+        try {
+          return await this.createFolder(service);
+        } catch (error) {
+          this.handleError(error.response.data.detail)
+        }
       } else {
-        folderToBeAdded = this.$store.getters.folderWithName(this.existingFolder)
+        return this.$store.getters.folderWithName(this.existingFolder)
       }
-      for (let element in this.selectedSubscriptions) {
-        var data = {'subscription_id': this.selectedSubscriptions[element].id.toString()}
-        await service.addSubscriptionToFolder(data, folderToBeAdded.pk)
-
-        this.$store.commit('addFolderToFeed', [this.selectedSubscriptions[element], folderToBeAdded])
-
-
+    }, assertValidRequest: function () {
+      if (this.selectedSubscriptions.length == 0) {
+        this.handleError('You must select at least one subscription')
+        return false;
       }
+      if (!(this.existingFolder || this.newFolder)) {
+        this.handleError('You have to create a new folder or select from a created one.')
+        return false;
+      }
+      return true;
+
+    }, async addSubscriptionsToFolder() {
+      var validRequest = this.assertValidRequest();
+      if (!validRequest) {
+        return
+      }
+      var folderService = new Folders();
+      var folderToBeAdded = await this.getFolder(folderService);
+      if (folderToBeAdded) {
+        try {
+          for (let element in this.selectedSubscriptions) {
+            await this.addSubscriptionToFolder(element, folderService, folderToBeAdded);
+          }
+        } catch (error) {
+          this.handleError(error.response.data.detail)
+          return
+        }
+        this.handleSuccess('Successfully added subscriptions to the folder')
+      }
+    },
+    handleError(message) {
+      this.responseMessage = message;
+      this.responseType = 'error';
+    },
+    handleSuccess(message) {
+      this.responseMessage = message;
+      this.responseType = 'success';
     }
   },
   async mounted() {

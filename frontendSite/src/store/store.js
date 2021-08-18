@@ -42,8 +42,9 @@ const store = new Vuex.Store({
         addFolderToFeed(state,data) {
             var feed = data[0]
             var folder = data[1]
+
             var feedIndex = state.feeds.indexOf(feed)
-            var folderIndex = (state.feeds[feedIndex]).folders.indexOf(folder)
+            var folderIndex = (state.feeds[feedIndex]).folders.indexOf(folder.name)
             if (folderIndex == -1) {
                 state.feeds[feedIndex].folders.push(folder.name)
             }
