@@ -64,9 +64,9 @@ export default {
         this.handleError(error.response.data.detail)
       }
     },
-    createFolder: async function (folderService) {
+    createFolder: async function (foldersService) {
       var name = {'name': this.newFolder}
-      var folder = await (folderService.createFolder(name));
+      var folder = await (foldersService.createFolder(name));
       this.$store.commit('addFolder', folder)
       return folder
     }, addSubscriptionToFolder: async function (element, service, folderToBeAdded) {
@@ -74,10 +74,10 @@ export default {
       await service.addSubscriptionToFolder(data, folderToBeAdded.pk)
       this.$store.commit('addFolderToFeed', [this.selectedSubscriptions[element], folderToBeAdded])
 
-    }, getFolder: async function (folderService) {
+    }, getFolder: async function (foldersService) {
       if (this.newFolder) {
         try {
-          return await this.createFolder(folderService);
+          return await this.createFolder(foldersService);
         } catch (error) {
           this.handleError(error.response.data.detail)
         }
