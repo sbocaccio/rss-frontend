@@ -61,7 +61,7 @@ export default {
         var folders = await (service.getFolders());
         this.$store.commit('setFolders', folders)
       } catch (error) {
-        this.handleError(error.detail)
+        this.handleError(error.response.data.detail)
       }
     },
     createFolder: async function (service) {
