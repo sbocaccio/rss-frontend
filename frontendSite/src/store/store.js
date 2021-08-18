@@ -40,13 +40,9 @@ const store = new Vuex.Store({
             state.feeds.splice(elementsIndex,1)
         },
         addFolderToFeed(state,data) {
-            var feed = data[0]
-            var folder = data[1]
-
-            var feedIndex = state.feeds.indexOf(feed)
-            var folderIndex = (state.feeds[feedIndex]).folders.indexOf(folder.name)
-            if (folderIndex == -1) {
-                state.feeds[feedIndex].folders.push(folder.name)
+            var feedIndex = state.feeds.indexOf(data['subscription'])
+            if(!state.feeds[feedIndex].folders.includes(data['folder'])){
+                state.feeds[feedIndex].folders.push(data['folder'])
             }
         }
     },
@@ -59,7 +55,7 @@ const store = new Vuex.Store({
         },
         isAuthenticated: state => {
             return state.isAuthenticated
-        } ,
+        },
         username: state => {
             return state.username
         },

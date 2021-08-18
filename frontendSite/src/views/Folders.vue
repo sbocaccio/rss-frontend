@@ -72,7 +72,8 @@ export default {
     }, addSubscriptionToFolder: async function (element, service, folderToBeAdded) {
       var data = {'subscription_id': this.selectedSubscriptions[element].id.toString()}
       await service.addSubscriptionToFolder(data, folderToBeAdded.pk)
-      this.$store.commit('addFolderToFeed', [this.selectedSubscriptions[element], folderToBeAdded])
+
+      this.$store.commit('addFolderToFeed', {'subscription':this.selectedSubscriptions[element],'folder':folderToBeAdded.name})
 
     }, getFolder: async function (foldersService) {
       if (this.newFolder) {
