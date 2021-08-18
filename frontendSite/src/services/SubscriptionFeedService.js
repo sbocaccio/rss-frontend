@@ -1,6 +1,6 @@
 import AuthService from './AuthService.js';
 import axiosApiInstance from './index.js';
-import url from '@/settings/settings.js';
+import {url} from '@/settings/settings.js';
 
 export default class SubscriptionFeed {
 

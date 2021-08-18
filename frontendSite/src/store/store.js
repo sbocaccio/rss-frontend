@@ -7,7 +7,7 @@ const store = new Vuex.Store({
     state: {
         feeds: [],
         articles: [],
-        isAuthenticated: false,
+        isAuthenticated: null,
         username: ''
     },
     mutations: {
