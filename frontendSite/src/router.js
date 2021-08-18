@@ -2,10 +2,12 @@ import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
 import Feed from "./views/Feeds.vue";
 import Articles from "./views/Articles.vue";
+import AuthService from "./services/AuthService";
 
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "./store/store.js";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -50,16 +52,20 @@ const router = new VueRouter({
 
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     var authenticated = store.getters["isAuthenticated"];
+    if (authenticated == null) {
+        var authService = new AuthService()
+        authenticated = await authService.checkLoggedIn()
+    }
+
     if (!to.meta.public) {
         if (authenticated) {
             next();
         } else {
             next({name: 'login'});
         }
-    }
-    else{
+    } else {
         if (!authenticated) {
             next();
         } else {
